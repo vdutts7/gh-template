@@ -56,7 +56,7 @@ cd <REPO_NAME>
 [example-url]: https://example.com
 [github]: https://img.shields.io/badge/💻_PROJECT__NAME-000000?style=for-the-badge
 [github-url]: https://github.com/GITHUB_USERNAME/PROJECT_NAME
-[website]: https://img.shields.io/badge/Website-000000?style=for-the-badge&logo=X&logoColor=white
+[website]: https://img.shields.io/badge/vd7.io-000000?style=for-the-badge&logo=Safari&logoColor=white
 [website-url]: https://vd7.io
-[twitter]: https://img.shields.io/badge/Twitter-000000?style=for-the-badge&logo=Twitter&logoColor=white
+[twitter]: https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white
 [twitter-url]: https://x.com/vdutts7
