@@ -18,37 +18,37 @@
 ## Table of Contents
 
 <ol>
-    <a href="#about">📝 About</a><br/>
-    <a href="#how-to-build">💻 How to build</a><br/>
-    <a href="#next-steps">🚀 Next steps</a><br/>
-    <a href="#tools-used">🔧 Tools used</a><br/>
-    <a href="#contact">👤 Contact</a>
+    <a href="#about">About</a><br/>
+    <a href="#how-to-build">How to build</a><br/>
+    <a href="#next-steps">Next steps</a><br/>
+    <a href="#tools-used">Tools used</a><br/>
+    <a href="#contact">Contact</a>
 </ol>
 
 <br/>
 
-## 📝About
+## About
 
 Brief description.
 
-## 💻How to build
+## How to build
 
 ```bash
 git clone <REPO_URL>
 cd <REPO_NAME>
 ```
 
-## 🚀Next steps
+## Next steps
 
 - [ ] TODO
 
-## 🔧Tools Used
+## Tools used
 
 [![Example][example-badge]][example-url]
 
-## 👤Contact
+## Contact
 
-[![Email][email]][email-url]
+[![Website][website]][website-url]
 [![Twitter][twitter]][twitter-url]
 
 <!-- BADGES - UPDATE THESE -->
@@ -56,7 +56,7 @@ cd <REPO_NAME>
 [example-url]: https://example.com
 [github]: https://img.shields.io/badge/💻_PROJECT__NAME-000000?style=for-the-badge
 [github-url]: https://github.com/GITHUB_USERNAME/PROJECT_NAME
-[email]: https://img.shields.io/badge/Email-000000?style=for-the-badge&logo=Gmail&logoColor=white
-[email-url]: mailto:me@vd7.io
+[website]: https://img.shields.io/badge/Website-000000?style=for-the-badge&logo=X&logoColor=white
+[website-url]: https://vd7.io
 [twitter]: https://img.shields.io/badge/Twitter-000000?style=for-the-badge&logo=Twitter&logoColor=white
 [twitter-url]: https://x.com/vdutts7
