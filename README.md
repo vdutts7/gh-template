@@ -56,6 +56,11 @@ GitHub repo template with AI agent configs, git hooks, and automation scripts.
 | <img src="assets/icons/agents/droid.webp" width="16"> | Droid | `.droid.yaml` |
 | <img src="assets/icons/agents/cline.webp" width="16"> | Cline | `.clinerules/*.md` |
 | <img src="assets/icons/agents/trae.webp" width="16"> | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` |
+| <img src="assets/icons/agents/antigravity.webp" width="16"> | Antigravity | `.antigravity` |
+| <img src="assets/icons/agents/pearai.webp" width="16"> | Pear AI | `~/.pearai/config.json` |
+| <img src="assets/icons/agents/conductor.webp" width="16"> | Conductor | `conductor.json` |
+| <img src="assets/icons/agents/kimi.webp" width="16"> | Kimi CLI | `AGENTS.md` |
+| <img src="assets/icons/agents/qwen.webp" width="16"> | Qwen CLI | `.env`, `.qwen-ignore` |
 
 - **Git Hooks** - `pre-commit`, `pre-push`, `post-checkout`
 - **Scripts** - `setup.sh`, `gen-social.sh`, `upload-cloudinary.sh`, `health-check.sh`
