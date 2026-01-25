@@ -1228,6 +1228,7 @@ _MCP_/
 .roo/*
 .cline*
 .superset/*
+.goose/*
 
 // TODO: add more + each one's respective ignore file
 
