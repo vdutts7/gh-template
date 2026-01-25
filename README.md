@@ -9,6 +9,26 @@
 
 <br/>
 
+
+## Structure
+
+```
+.github/
+├── hooks/
+│   └── pre-commit
+├── scripts/
+│   ├── setup.sh
+│   └── clearmeta.sh
+└── templates/
+    └── README.template.md   
+assets/
+└── icons/
+    └── agents/ 
+repo.config.json 
+```
+
+<br/>
+
 ## Setup
 
 1. Visit [Github repo template](https://github.com/vdutts7/gh-template) > **"Use this template"** > **"Create a new repository"** 
@@ -68,24 +88,6 @@
 
 <br/>
 
-## Structure
-
-```
-.github/
-├── hooks/
-│   └── pre-commit
-├── scripts/
-│   ├── setup.sh
-│   └── clearmeta.sh
-└── templates/
-    └── README.template.md   
-assets/
-└── icons/
-    └── agents/ 
-repo.config.json 
-```
-
-<br/>
 
 ## Contact
 
