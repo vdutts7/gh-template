@@ -1227,6 +1227,7 @@ _MCP_/
 .amazonq/*
 .roo/*
 .cline*
+.superset/*
 
 // TODO: add more + each one's respective ignore file
 
