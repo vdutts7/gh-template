@@ -62,8 +62,15 @@ GitHub repo template with AI agent configs, git hooks, and automation scripts.
 | <img src="assets/icons/agents/kimi.webp" width="16"> | Kimi CLI | `AGENTS.md` |
 | <img src="assets/icons/agents/qwen.webp" width="16"> | Qwen CLI | `.env`, `.qwen-ignore` |
 
+--
+
 - **Git Hooks** - `pre-commit`, `pre-push`, `post-checkout`
+
+--
+
 - **Scripts** - `setup.sh`, `gen-social.sh`, `upload-cloudinary.sh`, `health-check.sh`
+
+--
 
 ## How to build
 
@@ -72,18 +79,26 @@ git clone <REPO_URL>
 cd <REPO_NAME>
 ```
 
+--
+
 ## Next steps
 
 - [ ] TODO
+
+--
 
 ## Tools used
 
 [![Example][example-badge]][example-url]
 
+--
+
 ## Contact
 
 [![Website][website]][website-url]
 [![Twitter][twitter]][twitter-url]
+
+--
 
 <!-- BADGES - UPDATE THESE -->
 [example-badge]: https://img.shields.io/badge/Example-000000?style=for-the-badge
