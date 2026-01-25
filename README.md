@@ -79,7 +79,7 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 | <img src="assets/icons/agents/kilo.webp" width="16"> | Kilo | `.kilocode/launchConfig.json` |
 | <img src="assets/icons/agents/traycer.webp" width="16"> | Traycer | `.traycer/` |
 | <img src="assets/icons/agents/amp.webp" width="16"> | Amp | `AMP.md` |
-| <img src="assets/icons/agents/qoder.jpg" width="16"> | Qoder | `.qoder/` |
+| <img src="assets/icons/agents/qoder.webp" width="16"> | Qoder | `.qoder/` |
 | <img src="assets/icons/agents/warp.webp" width="16"> | Warp | `warp.md` |
 | <img src="assets/icons/agents/droid.webp" width="16"> | Droid | `.droid.yaml` |
 | <img src="assets/icons/agents/cline.webp" width="16"> | Cline | `.clinerules/*.md` |
@@ -89,6 +89,19 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 | <img src="assets/icons/agents/conductor.webp" width="16"> | Conductor | `conductor.json` |
 | <img src="assets/icons/agents/kimi.webp" width="16"> | Kimi CLI | `AGENTS.md` |
 | <img src="assets/icons/agents/qwen.webp" width="16"> | Qwen CLI | `.env`, `.qwen-ignore` |
+| <img src="assets/icons/agents/greptile.webp" width="16"> | Greptile | `.greptile/` |
+| <img src="assets/icons/agents/coderabbit.webp" width="16"> | CodeRabbit | `.coderabbit.yaml` |
+| <img src="assets/icons/agents/graphite.webp" width="16"> | Graphite | `.graphite/` |
+| <img src="assets/icons/agents/cody.webp" width="16"> | Cody | `.sourcegraph/` |
+| <img src="assets/icons/agents/tabnine.webp" width="16"> | Tabnine | `.tabnine/` |
+| <img src="assets/icons/agents/supermaven.webp" width="16"> | Supermaven | `.supermaven/` |
+| <img src="assets/icons/agents/continue.webp" width="16"> | Continue | `.continue/config.json` |
+| <img src="assets/icons/agents/devin.webp" width="16"> | Devin | `devin.md` |
+| <img src="assets/icons/agents/replit.webp" width="16"> | Replit | `.replit` |
+| <img src="assets/icons/agents/bolt.webp" width="16"> | Bolt | `bolt.json` |
+| <img src="assets/icons/agents/v0.webp" width="16"> | v0 | `v0.json` |
+| <img src="assets/icons/agents/lovable.webp" width="16"> | Lovable | `lovable.json` |
+| <img src="assets/icons/agents/blackbox.webp" width="16"> | Blackbox | `.blackbox/` |
 
 ### Git hooks
 
