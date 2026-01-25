@@ -99,10 +99,5 @@ repo.config.json              ← project configuration
 
 ## Contact
 
-[![Website][website]][website-url]
-[![Twitter][twitter]][twitter-url]
-
-[website]: https://res.cloudinary.com/ddyc1es5v/image/upload/h_28/v1768050242/gh-repos/gh-template/code.png
-[website-url]: https://vd7.io
-[twitter]: https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white
-[twitter-url]: https://x.com/vdutts7
+<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/h_28/v1768050242/gh-repos/gh-template/code.png" alt="vd7.io" /></a>
+<a href="https://x.com/vdutts7"><img src="https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white" alt="Twitter" /></a>

@@ -58,8 +58,8 @@ cd <REPO_NAME>
 
 ## Contact
 
-[![vd7.io site][website]][website-url]
-[![Twitter][twitter]][twitter-url]
+<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/h_28/v1768050242/gh-repos/PROJECT_NAME/code.png" alt="vd7.io" /></a>
+<a href="https://x.com/vdutts7"><img src="https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white" alt="Twitter" /></a>
 
 --
 
@@ -68,7 +68,3 @@ cd <REPO_NAME>
 [example-url]: https://example.com
 [github]: https://img.shields.io/badge/PROJECT__NAME-000000?style=for-the-badge&logo=github&logoColor=white
 [github-url]: https://github.com/GITHUB_USERNAME/PROJECT_NAME
-[website]: https://res.cloudinary.com/ddyc1es5v/image/upload/h_28/v1768050242/gh-repos/PROJECT_NAME/code.png
-[website-url]: https://vd7.io
-[twitter]: https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white
-[twitter-url]: https://x.com/vdutts7
