@@ -1,14 +1,53 @@
-#!/bin/bash
-# Blocks commits if email not in allowed list (reads from repo.config.json)
-# If allowed_emails is empty, skip check (user hasn't configured yet)
+#!/bin/zsh
+# Pre-commit hook:
+# 1. Runs clearmeta.sh on all staged files (NUCLEAR metadata strip)
+# 2. Blocks commits if email not in allowed list
+
+setopt pipefail 2>/dev/null || true
+set -eo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 CONFIG="$ROOT/repo.config.json"
 EMAIL=$(git config user.email)
+CLEARMETA="$ROOT/.github/scripts/clearmeta.sh"
+
+# ============================================
+# STEP 1: NUCLEAR metadata strip on staged files
+# ============================================
+
+if [[ -x "$CLEARMETA" ]]; then
+    # Get list of staged files (added/modified, not deleted)
+    staged_files=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null)
+    
+    if [[ -n "$staged_files" ]]; then
+        cleaned=0
+        
+        echo "$staged_files" | while IFS= read -r file; do
+            # Skip if file doesn't exist or is in .git
+            [[ ! -f "$file" ]] && continue
+            [[ "$file" == ".git/"* ]] && continue
+            
+            # Run clearmeta.sh quietly on each file
+            "$CLEARMETA" -q "$file" 2>/dev/null || true
+            
+            # Re-stage the cleaned file
+            git add "$file" 2>/dev/null
+            cleaned=$((cleaned + 1))
+        done
+        
+        echo "[pre-commit] 🔥 NUKED metadata from staged files"
+    fi
+else
+    echo "[pre-commit] warning: clearmeta.sh not found at $CLEARMETA"
+fi
+
+# ============================================
+# STEP 2: Email allowlist check
+# ============================================
 
 # Read allowed emails from config
 if [[ -f "$CONFIG" ]] && command -v jq &>/dev/null; then
-    ALLOWED=$(jq -r '.allowed_emails[]' "$CONFIG" 2>/dev/null)
+    ALLOWED=$(/usr/bin/jq -r '.allowed_emails[]' "$CONFIG" 2>/dev/null)
 else
     # No config or jq - skip check
     exit 0
@@ -20,7 +59,7 @@ fi
 echo "$ALLOWED" | grep -qx "$EMAIL" && exit 0
 
 echo ""
-echo "❌ BLOCKED: $EMAIL not allowed"
+echo "🔴 BLOCKED: $EMAIL not allowed"
 echo ""
 echo "Allowed emails (from repo.config.json):"
 echo "$ALLOWED" | sed 's/^/  /'

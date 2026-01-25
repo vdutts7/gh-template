@@ -5,11 +5,15 @@
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
-# 1. Install hooks (the ONLY thing that matters)
+# 1. Install hooks
 mkdir -p .git/hooks
 cp .github/hooks/* .git/hooks/ 2>/dev/null
 chmod +x .git/hooks/* 2>/dev/null
 echo "✓ Hooks installed"
+
+# 2. Make scripts executable
+chmod +x .github/scripts/*.sh 2>/dev/null
+echo "✓ Scripts ready"
 
 # 2. Prompt user to set email (they pick which one)
 echo ""
