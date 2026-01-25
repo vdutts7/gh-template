@@ -3,7 +3,7 @@
 <img src="assets/icons/vd7.webp" alt="logo" width="80" height="80" />
 
 <h1>gh-template</h1>
-<p><i><b>GitHub repo template with AI agent configs, git hooks, and automation scripts.</b></i></p>
+<p><i><b>GitHub repo template with AI agent configs, git hooks, automation scripts, metadata cleansing.</b></i></p>
 
 </div>
 
@@ -11,21 +11,11 @@
 
 ## Setup
 
-1. Visit [Github repo template](https://github.com/vdutts7/gh-template) > **"Use this template"** > **"Create a new repository"**
-2. Clone new repo locally
-3. Run setup:
-
-```bash
-.github/scripts/setup.sh
-```
-
+1. Visit [Github repo template](https://github.com/vdutts7/gh-template) > **"Use this template"** > **"Create a new repository"** 
+2. `git clone https://github.com/vdutts7/gh-template.git && cd gh-template`
+3. `.github/scripts/setup.sh`
 4. Update `repo.config.json` with project details
-5. Copy README template:
-
-```bash
-cp .github/templates/README.template.md README.md
-```
-
+5. `cp .github/templates/README.template.md README.md`
 6. Find + replace placeholders in `README.md`:
    - `PROJECT_NAME` → your repo name
    - `GITHUB_USERNAME` → your GitHub username
@@ -73,12 +63,12 @@ cp .github/templates/README.template.md README.md
 
 | Script | Purpose |
 |--------|---------|
-| `setup.sh` | Initial setup after cloning |
-| `clearmeta.sh` | Clear metadata/caches |
+| `setup.sh` | initial setup after cloning |
+| `clearmeta.sh` | clear metadata/caches; note: still leaves behind Apple SIP-protected provenance |
 
 <br/>
 
-## File structure
+## Structure
 
 ```
 .github/
@@ -88,11 +78,11 @@ cp .github/templates/README.template.md README.md
 │   ├── setup.sh
 │   └── clearmeta.sh
 └── templates/
-    └── README.template.md    ← copy this to README.md
+    └── README.template.md   
 assets/
 └── icons/
-    └── agents/               ← AI agent icons
-repo.config.json              ← project configuration
+    └── agents/ 
+repo.config.json 
 ```
 
 <br/>
