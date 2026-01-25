@@ -66,7 +66,6 @@ GitHub repo template with AI agent configs, git hooks, and automation scripts.
 
 - **Git Hooks** - `pre-commit`, `pre-push`, `post-checkout`
 
---
 
 - **Scripts** - `setup.sh`, `gen-social.sh`, `upload-cloudinary.sh`, `health-check.sh`
 
@@ -79,19 +78,17 @@ git clone <REPO_URL>
 cd <REPO_NAME>
 ```
 
---
 
 ## Next steps
 
 - [ ] TODO
 
---
+
 
 ## Tools used
 
 [![Example][example-badge]][example-url]
 
---
 
 ## Contact
 
@@ -103,9 +100,9 @@ cd <REPO_NAME>
 <!-- BADGES - UPDATE THESE -->
 [example-badge]: https://img.shields.io/badge/Example-000000?style=for-the-badge
 [example-url]: https://example.com
-[github]: https://img.shields.io/badge/💻_PROJECT__NAME-000000?style=for-the-badge
+[github]: https://img.shields.io/badge/PROJECT__NAME-000000?style=for-the-badge&logo=github&logoColor=white
 [github-url]: https://github.com/GITHUB_USERNAME/PROJECT_NAME
-[website]: https://img.shields.io/badge/vd7.io-000000?style=for-the-badge&logo=Safari&logoColor=white
+[website]: https://img.shields.io/badge/vd7.io-000000?style=for-the-badge&logo=safari&logoColor=white
 [website-url]: https://vd7.io
 [twitter]: https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white
 [twitter-url]: https://x.com/vdutts7
