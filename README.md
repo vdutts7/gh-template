@@ -1,37 +1,40 @@
 <div align="center">
 
-<!-- ICONS: Create at https://vd7.dev/icon-creator, export to assets/icons/, run gen-social.sh -->
-<img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1768050242/gh-repos/PROJECT_NAME/code.png" alt="logo" width="80" height="80" />
-<img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1768050244/gh-repos/PROJECT_NAME/github.png" alt="logo" width="80" height="80" />
+<img src="assets/icons/vd7.webp" alt="logo" width="80" height="80" />
 
-<h1 align="center">PROJECT_NAME</h1>
-<p align="center"><i><b>One-liner description here.</b></i></p>
-
-[![Github][github]][github-url]
-
-<img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1768050244/gh-repos/PROJECT_NAME/social-preview.png" />
+<h1>gh-template</h1>
+<p><i><b>GitHub repo template with AI agent configs, git hooks, and automation scripts.</b></i></p>
 
 </div>
 
 <br/>
 
-## Table of Contents
+## Setup
 
-<ol>
-    <a href="#about">About</a><br/>
-    <a href="#how-to-build">How to build</a><br/>
-    <a href="#next-steps">Next steps</a><br/>
-    <a href="#tools-used">Tools used</a><br/>
-    <a href="#contact">Contact</a>
-</ol>
+1. Visit [Github repo template](https://github.com/vdutts7/gh-template) > **"Use this template"** > **"Create a new repository"**
+2. Clone new repo locally
+3. Run setup:
+
+```bash
+.github/scripts/setup.sh
+```
+
+4. Update `repo.config.json` with project details
+5. Copy README template:
+
+```bash
+cp .github/templates/README.template.md README.md
+```
+
+6. Find + replace placeholders in `README.md`:
+   - `PROJECT_NAME` → your repo name
+   - `GITHUB_USERNAME` → your GitHub username
 
 <br/>
 
-## About
+## Included
 
-GitHub repo template with AI agent configs, git hooks, and automation scripts.
-
-**Agent Configs**
+### Agent configs
 
 | | Agent | Files |
 |:---:|-------|-------|
@@ -62,47 +65,44 @@ GitHub repo template with AI agent configs, git hooks, and automation scripts.
 | <img src="assets/icons/agents/kimi.webp" width="16"> | Kimi CLI | `AGENTS.md` |
 | <img src="assets/icons/agents/qwen.webp" width="16"> | Qwen CLI | `.env`, `.qwen-ignore` |
 
---
+### Git hooks
 
-- **Git Hooks** - `pre-commit`, `pre-push`, `post-checkout`
+- `pre-commit`- runs before each commit
 
+### Scripts
 
-- **Scripts** - `setup.sh`, `gen-social.sh`, `upload-cloudinary.sh`, `health-check.sh`
+| Script | Purpose |
+|--------|---------|
+| `setup.sh` | Initial setup after cloning |
+| `clearmeta.sh` | Clear metadata/caches |
 
---
+<br/>
 
-## How to build
+## File structure
 
-```bash
-git clone <REPO_URL>
-cd <REPO_NAME>
+```
+.github/
+├── hooks/
+│   └── pre-commit
+├── scripts/
+│   ├── setup.sh
+│   └── clearmeta.sh
+└── templates/
+    └── README.template.md    ← copy this to README.md
+assets/
+└── icons/
+    └── agents/               ← AI agent icons
+repo.config.json              ← project configuration
 ```
 
-
-## Next steps
-
-- [ ] TODO
-
-
-
-## Tools used
-
-[![Example][example-badge]][example-url]
-
+<br/>
 
 ## Contact
 
 [![Website][website]][website-url]
 [![Twitter][twitter]][twitter-url]
 
---
-
-<!-- BADGES - UPDATE THESE -->
-[example-badge]: https://img.shields.io/badge/Example-000000?style=for-the-badge
-[example-url]: https://example.com
-[github]: https://img.shields.io/badge/PROJECT__NAME-000000?style=for-the-badge&logo=github&logoColor=white
-[github-url]: https://github.com/GITHUB_USERNAME/PROJECT_NAME
-[website]: https://img.shields.io/badge/vd7.io-000000?style=for-the-badge&logo=safari&logoColor=white
+[website]: https://res.cloudinary.com/ddyc1es5v/image/upload/h_28/v1768050242/gh-repos/gh-template/code.png
 [website-url]: https://vd7.io
 [twitter]: https://img.shields.io/badge//vdutts7-000000?style=for-the-badge&logo=X&logoColor=white
 [twitter-url]: https://x.com/vdutts7
