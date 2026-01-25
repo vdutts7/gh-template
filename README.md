@@ -15,15 +15,23 @@
 ```
 .github/
 ├── hooks/
-│   └── pre-commit
+│   ├── pre-commit
+│   ├── pre-push
+│   └── post-checkout
 ├── scripts/
-│   ├── setup.sh
-│   └── clearmeta.sh
+│   ├── setup.sh 
+│   ├── clearmeta.sh
+│   ├── gen-social.sh
+│   ├── health-check.sh
+│   └── upload-cloudinary.sh
 └── templates/
-    └── README.template.md   
+    ├── README.template.md 
+    ├── timeline.template.json  ← project timeline/milestones
+    └── [agent configs]/        ← aider, claude, codex, cursor, etc.
 assets/
-└── icons/
-    └── agents/ 
+├── icons/
+│   └── agents/                 
+└── social-preview-blank.png    ← GitHub social preview (1280x640)
 repo.config.json 
 ```
 
@@ -32,13 +40,25 @@ repo.config.json
 ## Setup
 
 1. Visit [Github repo template](https://github.com/vdutts7/gh-template) > **"Use this template"** > **"Create a new repository"** 
-2. `git clone https://github.com/vdutts7/gh-template.git && cd gh-template`
-3. `.github/scripts/setup.sh`
-4. Update `repo.config.json` with project details
+2. 
+
+```bash
+git clone https://github.com/vdutts7/gh-template.git && cd gh-template
+```
+
+3. 
+
+```bash
+.github/scripts/setup.sh
+```
+
+4. Update `repo.config.json` with project details- needed for other scripts to work
 5. `cp .github/templates/README.template.md README.md`
 6. Find + replace placeholders in `README.md`:
-   - `PROJECT_NAME` → your repo name
-   - `GITHUB_USERNAME` → your GitHub username
+   - `PROJECT_NAME` → GitHub repo name
+   - `GITHUB_USERNAME` → GitHub username
+7. Replace `assets/social-preview-blank.png` with your image (use `assets/social-preview.png` as reference), then set it in GitHub repo Settings > General > Social preview
+8. `cp .github/templates/timeline.template.json timeline.json` - AI agents will extend this as you work
 
 <br/>
 
@@ -77,7 +97,9 @@ repo.config.json
 
 ### Git hooks
 
-- `pre-commit`- runs before each commit
+- `pre-commit` - runs before each commit
+- `pre-push` - runs before each push
+- `post-checkout` - runs after checkout/clone
 
 ### Scripts
 
@@ -85,6 +107,17 @@ repo.config.json
 |--------|---------|
 | `setup.sh` | initial setup after cloning |
 | `clearmeta.sh` | clear metadata/caches; note: still leaves behind Apple SIP-protected provenance |
+| `gen-social.sh` | generate social preview image |
+| `health-check.sh` | verify repo setup |
+| `upload-cloudinary.sh` | upload assets to Cloudinary |
+
+### timeline.json
+
+- **Append-only** project memory
+- timestamped ledger / makeshift database for full traceability/auditability
+- AI agents auto-extend `timeline.json` as you work (or you manually invoke via `/timeline` slash command)
+> **Why:** Context persists across sessions -> when you return to a project, agents can read the timeline to understand what happened, what decisions were made, and what's blocked
+
 
 <br/>
 
