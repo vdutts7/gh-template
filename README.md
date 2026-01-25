@@ -26,6 +26,7 @@
 │   └── upload-cloudinary.sh
 └── templates/
     ├── README.template.md 
+    ├── .gitignore.template     ← mega gitignore (set & forget)
     ├── timeline.template.json  ← project timeline/milestones
     └── [agent configs]/        ← aider, claude, codex, cursor, etc.
 assets/
@@ -54,6 +55,7 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
    - `GITHUB_USERNAME` → GitHub username
 6. Edit atop `assets/social-preview-blank.png` with your 1280x640 image (use `assets/social-preview.png` as reference), then set it in GitHub repo Settings > General > Social preview
 7. `cp .github/templates/timeline.template.json timeline.json` - AI agents will extend this as you work
+8. `cp .github/templates/.gitignore.template .gitignore` - comprehensive gitignore covering OS, editors, deps, builds, env, logs, caches, 30+ languages, 15+ frameworks, databases, cloud platforms, agentic tools
 
 <br/>
 
