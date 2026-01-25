@@ -44,21 +44,16 @@ repo.config.json
 
 ```bash
 git clone https://github.com/vdutts7/gh-template.git && cd gh-template
-```
-
-3. 
-
-```bash
 .github/scripts/setup.sh
 ```
 
-4. Update `repo.config.json` with project details- needed for other scripts to work
-5. `cp .github/templates/README.template.md README.md`
-6. Find + replace placeholders in `README.md`:
+3. Update `repo.config.json` with project details- needed for other scripts to work
+4. `cp .github/templates/README.template.md README.md`
+5. Update `README.md` with project details:
    - `PROJECT_NAME` → GitHub repo name
    - `GITHUB_USERNAME` → GitHub username
-7. Replace `assets/social-preview-blank.png` with your image (use `assets/social-preview.png` as reference), then set it in GitHub repo Settings > General > Social preview
-8. `cp .github/templates/timeline.template.json timeline.json` - AI agents will extend this as you work
+6. Edit atop `assets/social-preview-blank.png` with your 1280x640 image (use `assets/social-preview.png` as reference), then set it in GitHub repo Settings > General > Social preview
+7. `cp .github/templates/timeline.template.json timeline.json` - AI agents will extend this as you work
 
 <br/>
 
@@ -84,7 +79,7 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 | <img src="assets/icons/agents/kilo.webp" width="16"> | Kilo | `.kilocode/launchConfig.json` |
 | <img src="assets/icons/agents/traycer.webp" width="16"> | Traycer | `.traycer/` |
 | <img src="assets/icons/agents/amp.webp" width="16"> | Amp | `AMP.md` |
-| <img src="assets/icons/agents/qodo.webp" width="16"> | Qodo | `.ai_config.toml` |
+| <img src="assets/icons/agents/qoder.jpg" width="16"> | Qoder | `.qoder/` |
 | <img src="assets/icons/agents/warp.webp" width="16"> | Warp | `warp.md` |
 | <img src="assets/icons/agents/droid.webp" width="16"> | Droid | `.droid.yaml` |
 | <img src="assets/icons/agents/cline.webp" width="16"> | Cline | `.clinerules/*.md` |
