@@ -104,7 +104,7 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 | <img src="https://raw.githubusercontent.com/vdutts7/webp/main/v0.webp" width="16"> | v0 | `v0.json` |
 | <img src="https://raw.githubusercontent.com/vdutts7/webp/main/lovable.webp" width="16"> | Lovable | `lovable.json` |
 | <img src="https://raw.githubusercontent.com/vdutts7/webp/main/blackbox.webp" width="16"> | Blackbox | `.blackbox/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/superset.webp" width="16"> | Superset | `.superset/config.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/webp/refs/heads/main/superset.webp" width="16"> | Superset | `.superset/config.json` |
 | <img src="https://raw.githubusercontent.com/vdutts7/webp/main/goose.webp" width="16"> | Goose | `.goosehints` |
 
 ### Git hooks
