@@ -115,13 +115,15 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 
 ### Scripts
 
+> Each script has usage instructions at the top of the file.
+
 | Script | Purpose |
 |--------|---------|
 | `setup.sh` | initial setup after cloning |
 | `clearmeta.sh` | clear metadata/caches; note: still leaves behind Apple SIP-protected provenance |
 | `gen-social.sh` | generate social preview image |
 | `health-check.sh` | verify repo setup |
-| `upload-cloudinary.sh` | upload assets to Cloudinary |
+| `upload-cloudinary.sh` | upload assets to Cloudinary (set `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_UPLOAD_PRESET` env vars) |
 
 ### timeline.json
 
