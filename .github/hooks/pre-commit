@@ -1,7 +1,8 @@
 #!/bin/zsh
 # Pre-commit hook:
 # 1. Runs clearmeta.sh on all staged files (NUCLEAR metadata strip)
-# 2. Blocks commits if email not in allowed list
+# 2. Smart email routing: Amazon repos vs personal repos
+# 3. Falls back to repo.config.json allowlist
 
 setopt pipefail 2>/dev/null || true
 set -eo pipefail
@@ -49,8 +50,9 @@ fi
 if [[ -f "$CONFIG" ]] && command -v jq &>/dev/null; then
     ALLOWED=$(/usr/bin/jq -r '.allowed_emails[]' "$CONFIG" 2>/dev/null)
 else
-    # No config or jq - skip check
-    exit 0
+    # No config or jq - use hardcoded personal emails
+    ALLOWED="github.relock416@passmail.net
+me@vd7.io"
 fi
 
 # If no emails configured, skip check
@@ -59,11 +61,14 @@ fi
 echo "$ALLOWED" | grep -qx "$EMAIL" && exit 0
 
 echo ""
-echo "🔴 BLOCKED: $EMAIL not allowed"
-echo ""
-echo "Allowed emails (from repo.config.json):"
-echo "$ALLOWED" | sed 's/^/  /'
-echo ""
-echo "Fix: git config user.email '<one of the above>'"
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "║  ❌ COMMIT BLOCKED - Email not in allowed list               ║"
+echo "╠══════════════════════════════════════════════════════════════╣"
+echo "║  Current: $EMAIL"
+echo "║  Allowed: $(echo "$ALLOWED" | tr '\n' ', ' | sed 's/, $//')"
+echo "╠══════════════════════════════════════════════════════════════╣"
+echo "║  FIX: git config user.email '<allowed_email>'                ║"
+echo "║   OR: Run ~/.bin/git-set-personal                            ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
 exit 1

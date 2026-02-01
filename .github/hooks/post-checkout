@@ -1,16 +1,25 @@
 #!/bin/bash
-# Auto-prompt to set email on checkout if not set correctly
-# If allowed_emails is empty, skip check
+# Auto-configure git email on checkout
+# 1. Try ~/.bin/git-set-personal for auto-config
+# 2. Falls back to repo.config.json allowlist prompt
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 CONFIG="$ROOT/repo.config.json"
 EMAIL=$(git config user.email 2>/dev/null)
 
-# Read allowed emails from config
+# Try auto-config script first (from global git-templates pattern)
+if [[ -x "$HOME/.bin/git-set-personal" ]]; then
+    "$HOME/.bin/git-set-personal" 2>/dev/null || true
+    EMAIL=$(git config user.email 2>/dev/null)
+fi
+
+# Check against allowlist
 if [[ -f "$CONFIG" ]] && command -v jq &>/dev/null; then
     ALLOWED=$(jq -r '.allowed_emails[]' "$CONFIG" 2>/dev/null)
 else
-    exit 0
+    # Hardcoded fallback
+    ALLOWED="github.relock416@passmail.net
+me@vd7.io"
 fi
 
 # If no emails configured, skip check
@@ -19,6 +28,12 @@ fi
 echo "$ALLOWED" | grep -qx "$EMAIL" && exit 0
 
 echo ""
-echo "⚠ Git email not set. Pick one from repo.config.json:"
+echo "⚠ Git email not set correctly for this repo."
+echo ""
+echo "Current: $EMAIL"
+echo ""
+echo "Pick one:"
 echo "$ALLOWED" | sed 's/^/  git config user.email '\''/' | sed 's/$/'\''/'
+echo ""
+echo "Or run: ~/.bin/git-set-personal"
 echo ""
