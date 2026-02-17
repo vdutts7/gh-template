@@ -10,10 +10,7 @@
     "website": "https://vd7.io",
     "twitter": "vaboratory"
   },
-  "allowed_emails": [
-    "github.relock416@passmail.net",
-    "me@vd7.io"
-  ],
+  "allowed_github_users": ["vdutts7"],
   "social_preview": {
     "title": "PROJECT_NAME",
     "icons_dir": "assets/icons",

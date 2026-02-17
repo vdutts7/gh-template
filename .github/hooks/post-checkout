@@ -1,39 +1,32 @@
 #!/bin/bash
-# Auto-configure git email on checkout
-# 1. Try ~/.bin/git-set-personal for auto-config
-# 2. Falls back to repo.config.json allowlist prompt
+# Auto-check git identity on checkout
+# Warns if user.name doesn't match allowed_github_users
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 CONFIG="$ROOT/repo.config.json"
-EMAIL=$(git config user.email 2>/dev/null)
+USERNAME=$(git config user.name 2>/dev/null || echo "")
 
-# Try auto-config script first (from global git-templates pattern)
-if [[ -x "$HOME/.bin/git-set-personal" ]]; then
-    "$HOME/.bin/git-set-personal" 2>/dev/null || true
-    EMAIL=$(git config user.email 2>/dev/null)
-fi
-
-# Check against allowlist
+# Read allowed users from config
 if [[ -f "$CONFIG" ]] && command -v jq &>/dev/null; then
-    ALLOWED=$(jq -r '.allowed_emails[]' "$CONFIG" 2>/dev/null)
-else
-    # Hardcoded fallback
-    ALLOWED="github.relock416@passmail.net
-me@vd7.io"
+    ALLOWED=$(jq -r '.allowed_github_users[]? // empty' "$CONFIG" 2>/dev/null)
+    # Fallback: use owner.github_username if allowed_github_users not set
+    if [[ -z "$ALLOWED" ]]; then
+        ALLOWED=$(jq -r '.owner.github_username // empty' "$CONFIG" 2>/dev/null)
+    fi
 fi
 
-# If no emails configured, skip check
 [[ -z "$ALLOWED" ]] && exit 0
+[[ -z "$USERNAME" ]] && { echo "⚠ git user.name not set"; exit 0; }
 
-echo "$ALLOWED" | grep -qx "$EMAIL" && exit 0
+echo "$ALLOWED" | grep -qix "$USERNAME" && exit 0
 
 echo ""
-echo "⚠ Git email not set correctly for this repo."
+echo "⚠ Git user.name doesn't match allowed GitHub users for this repo."
 echo ""
-echo "Current: $EMAIL"
+echo "Current: $USERNAME"
 echo ""
-echo "Pick one:"
-echo "$ALLOWED" | sed 's/^/  git config user.email '\''/' | sed 's/$/'\''/'
+echo "Allowed:"
+echo "$ALLOWED" | sed 's/^/  /'
 echo ""
-echo "Or run: ~/.bin/git-set-personal"
+echo "Fix: git config user.name '<github_username>'"
 echo ""

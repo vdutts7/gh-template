@@ -1,15 +1,13 @@
 #!/bin/zsh
 # Pre-commit hook:
 # 1. Runs clearmeta.sh on all staged files (NUCLEAR metadata strip)
-# 2. Smart email routing: Amazon repos vs personal repos
-# 3. Falls back to repo.config.json allowlist
+# 2. Checks committer is an allowed GitHub user (not email-based — emails change)
 
 setopt pipefail 2>/dev/null || true
 set -eo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 CONFIG="$ROOT/repo.config.json"
-EMAIL=$(git config user.email)
 CLEARMETA="$ROOT/.github/scripts/clearmeta.sh"
 
 # ============================================
@@ -17,25 +15,15 @@ CLEARMETA="$ROOT/.github/scripts/clearmeta.sh"
 # ============================================
 
 if [[ -x "$CLEARMETA" ]]; then
-    # Get list of staged files (added/modified, not deleted)
     staged_files=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null)
     
     if [[ -n "$staged_files" ]]; then
-        cleaned=0
-        
         echo "$staged_files" | while IFS= read -r file; do
-            # Skip if file doesn't exist or is in .git
             [[ ! -f "$file" ]] && continue
             [[ "$file" == ".git/"* ]] && continue
-            
-            # Run clearmeta.sh quietly on each file
             "$CLEARMETA" -q "$file" 2>/dev/null || true
-            
-            # Re-stage the cleaned file
             git add "$file" 2>/dev/null
-            cleaned=$((cleaned + 1))
         done
-        
         echo "[pre-commit] 🔥 NUKED metadata from staged files"
     fi
 else
@@ -43,32 +31,41 @@ else
 fi
 
 # ============================================
-# STEP 2: Email allowlist check
+# STEP 2: GitHub user allowlist check
 # ============================================
 
-# Read allowed emails from config
+# Read allowed users from config (or fall back to repo owner)
 if [[ -f "$CONFIG" ]] && command -v jq &>/dev/null; then
-    ALLOWED=$(/usr/bin/jq -r '.allowed_emails[]' "$CONFIG" 2>/dev/null)
-else
-    # No config or jq - use hardcoded personal emails
-    ALLOWED="github.relock416@passmail.net
-me@vd7.io"
+    ALLOWED=$(/usr/bin/jq -r '.allowed_github_users[]? // empty' "$CONFIG" 2>/dev/null)
+    # Fallback: use owner.github_username if allowed_github_users not set
+    if [[ -z "$ALLOWED" ]]; then
+        ALLOWED=$(/usr/bin/jq -r '.owner.github_username // empty' "$CONFIG" 2>/dev/null)
+    fi
 fi
 
-# If no emails configured, skip check
+# If no allowlist configured, skip check
 [[ -z "$ALLOWED" ]] && exit 0
 
-echo "$ALLOWED" | grep -qx "$EMAIL" && exit 0
+# Check git user.name against allowed GitHub usernames
+USERNAME=$(git config user.name 2>/dev/null || echo "")
+[[ -z "$USERNAME" ]] && { echo "[pre-commit] ❌ git user.name not set"; exit 1; }
+
+echo "$ALLOWED" | grep -qix "$USERNAME" && exit 0
+
+# Also check if remote URL contains any allowed user (repo owner check)
+REMOTE_URL=$(git config --get remote.origin.url 2>/dev/null || echo "")
+for user in $(echo "$ALLOWED"); do
+    [[ "$REMOTE_URL" == *"$user"* ]] && exit 0
+done
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║  ❌ COMMIT BLOCKED - Email not in allowed list               ║"
+echo "║  ❌ COMMIT BLOCKED - user not in allowed_github_users        ║"
 echo "╠══════════════════════════════════════════════════════════════╣"
-echo "║  Current: $EMAIL"
-echo "║  Allowed: $(echo "$ALLOWED" | tr '\n' ', ' | sed 's/, $//')"
+echo "║  Current user.name: $USERNAME"
+echo "║  Allowed:           $(echo "$ALLOWED" | tr '\n' ', ' | sed 's/, $//')"
 echo "╠══════════════════════════════════════════════════════════════╣"
-echo "║  FIX: git config user.email '<allowed_email>'                ║"
-echo "║   OR: Run ~/.bin/git-set-personal                            ║"
+echo "║  FIX: git config user.name '<github_username>'               ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
 exit 1
