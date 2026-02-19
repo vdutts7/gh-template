@@ -13,26 +13,28 @@
 ## Structure
 
 ```
+.hooks/
+├── pre-commit              ← metadata strip + collaborator check
+├── pre-push                ← health check (large files, embedded repos)
+├── post-checkout           ← identity warning
+└── scripts/
+    ├── setup.sh            ← one-time setup after clone
+    ├── check-collaborator.sh ← forge-agnostic (GitHub/GitLab/Codeberg/Gitea/Bitbucket)
+    ├── clearmeta.sh
+    ├── gen-social.sh
+    ├── health-check.sh
+    └── upload-cloudinary.sh
 .github/
-├── hooks/
-│   ├── pre-commit
-│   ├── pre-push
-│   └── post-checkout
-├── scripts/
-│   ├── setup.sh 
-│   ├── clearmeta.sh
-│   ├── gen-social.sh
-│   ├── health-check.sh
-│   └── upload-cloudinary.sh
 └── templates/
     ├── README.template.md 
     ├── .gitignore.template     ← mega gitignore (set & forget)
     ├── timeline.template.json  ← project timeline/milestones
     └── [agent configs]/        ← aider, claude, codex, cursor, etc.
+.gitconfig                  ← repo-level git config (core.hooksPath)
 assets/
 ├── icons/
 │   └── agents/                 
-└── social-preview-blank.png    ← GitHub social preview (1280x640)
+└── social-preview-blank.png    ← social preview (1280x640)
 repo.config.json 
 ```
 
@@ -40,22 +42,20 @@ repo.config.json
 
 ## Setup
 
-1. Visit [Github repo template](https://github.com/vdutts7/gh-template) > **"Use this template"** > **"Create a new repository"** 
-2. 
-
 ```bash
-git clone https://github.com/vdutts7/gh-template.git && cd gh-template
-.github/scripts/setup.sh
+# 1. Create repo from template (GitHub UI: "Use this template" → "Create new repository")
+# 2. Clone + activate hooks
+git clone <your-repo-url> && cd <your-repo>
+.hooks/scripts/setup.sh
+
+# 3. Configure
+# edit repo.config.json with project details (scripts read from this)
+cp .github/templates/README.template.md README.md        # then replace PROJECT_NAME, USERNAME
+cp .github/templates/.gitignore.template .gitignore       # mega gitignore (set & forget)
+cp .github/templates/timeline.template.json timeline.json # AI agents auto-extend this
 ```
 
-3. Update `repo.config.json` with project details- needed for other scripts to work
-4. `cp .github/templates/README.template.md README.md`
-5. Update `README.md` with project details:
-   - `PROJECT_NAME` → GitHub repo name
-   - `GITHUB_USERNAME` → GitHub username
-6. Edit atop `assets/social-preview-blank.png` with your 1280x640 image (use `assets/social-preview.png` as reference), then set it in GitHub repo Settings > General > Social preview
-7. `cp .github/templates/timeline.template.json timeline.json` - AI agents will extend this as you work
-8. `cp .github/templates/.gitignore.template .gitignore` - comprehensive gitignore covering OS, editors, deps, builds, env, logs, caches, 30+ languages, 15+ frameworks, databases, cloud platforms, agentic tools
+> **Step 2 is mandatory** — hooks don't activate until you run `setup.sh`.
 
 <br/>
 
@@ -107,11 +107,17 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 | <img src="https://raw.githubusercontent.com/vdutts7/webp/refs/heads/main/superset.webp" width="16"> | Superset | `.superset/config.json` |
 | <img src="https://raw.githubusercontent.com/vdutts7/webp/main/goose.webp" width="16"> | Goose | `.goosehints` |
 
-### Git hooks
+### Git hooks (platform-agnostic)
 
-- `pre-commit` - runs before each commit
-- `pre-push` - runs before each push
-- `post-checkout` - runs after checkout/clone
+Hooks live in `.hooks/` (not `.github/hooks/`) — works with any git forge (GitHub, GitLab, Codeberg, Gitea, Bitbucket, self-hosted).
+
+One-time setup after clone: `.hooks/scripts/setup.sh`
+
+| Hook | Trigger | What it does |
+|------|---------|-------------|
+| `pre-commit` | before commit | strips file metadata, checks collaborator access |
+| `pre-push` | before push | blocks large files (>90MB), embedded repos |
+| `post-checkout` | after checkout | warns if user.name doesn't match collaborator |
 
 ### Scripts
 
@@ -119,10 +125,11 @@ git clone https://github.com/vdutts7/gh-template.git && cd gh-template
 
 | Script | Purpose |
 |--------|---------|
-| `setup.sh` | initial setup after cloning |
-| `clearmeta.sh` | clear metadata/caches; note: still leaves behind Apple SIP-protected provenance |
+| `setup.sh` | one-time setup after cloning (activates hooks) |
+| `check-collaborator.sh` | forge-agnostic collaborator check (auto-detects from remote URL) |
+| `clearmeta.sh` | NUCLEAR metadata strip; note: Apple SIP-protected provenance may persist |
 | `gen-social.sh` | generate social preview image |
-| `health-check.sh` | verify repo setup |
+| `health-check.sh` | pre-push health check |
 | `upload-cloudinary.sh` | upload assets to Cloudinary (set `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_UPLOAD_PRESET` env vars) |
 
 ### timeline.json

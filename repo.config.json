@@ -6,11 +6,15 @@
     "topics": []
   },
   "owner": {
-    "github_username": "vdutts7",
+    "username": "vdutts7",
     "website": "https://vd7.io",
     "twitter": "vaboratory"
   },
-  "allowed_github_users": ["vdutts7"],
+  "access_control": {
+    "_description": "Hooks auto-detect forge from remote URL (GitHub/GitLab/Codeberg/Gitea/Bitbucket). Only owner + collaborators can commit.",
+    "owner": "$REPO_OWNER",
+    "token": "$REPO_TOKEN"
+  },
   "social_preview": {
     "title": "PROJECT_NAME",
     "icons_dir": "assets/icons",
