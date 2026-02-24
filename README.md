@@ -27,6 +27,8 @@
 .github/
 └── templates/
     ├── README.template.md 
+    ├── TODOs.template.md       ← copy to root → TODOs.md
+    ├── _0/                     ← copy to root (cp -r) → gitignored working dir (_archive, _artifacts, _plans)
     ├── .gitignore.template     ← mega gitignore (set & forget)
     ├── timeline.template.json  ← project timeline/milestones
     └── [agent configs]/        ← aider, claude, codex, cursor, etc.
