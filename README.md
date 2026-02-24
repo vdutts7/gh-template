@@ -52,9 +52,13 @@ git clone <your-repo-url> && cd <your-repo>
 
 # 3. Configure
 # edit repo.config.json with project details (scripts read from this)
-cp .github/templates/README.template.md README.md        # then replace PROJECT_NAME, USERNAME
 cp .github/templates/.gitignore.template .gitignore       # mega gitignore (set & forget)
 cp .github/templates/timeline.template.json timeline.json # AI agents auto-extend this
+cp .github/templates/TODOs.template.md TODOs.md
+cp -r .github/templates/_0 .
+
+# 4. Last: replace this README with your project README (run only when done with setup)
+cp .github/templates/README.template.md README.md        # then replace PROJECT_NAME, USERNAME
 ```
 
 > **Step 2 is mandatory** — hooks don't activate until you run `setup.sh`.
