@@ -19,6 +19,7 @@
 ├── post-checkout           ← identity warning
 └── scripts/
     ├── setup.sh            ← one-time setup after clone
+    ├── set-remote.sh       ← set origin from repo.config.json (remote.prefer / origin_url)
     ├── check-collaborator.sh ← forge-agnostic (GitHub/GitLab/Codeberg/Gitea/Bitbucket)
     ├── clearmeta.sh
     ├── gen-social.sh
@@ -46,22 +47,36 @@ repo.config.json
 
 ```bash
 # 1. Create repo from template (GitHub UI: "Use this template" → "Create new repository")
-# 2. Clone + activate hooks
-git clone <your-repo-url> && cd <your-repo>
+# 2. Clone + activate hooks (use SSH or HTTPS URL from GitHub repo page— same steps either way)
+git clone <your-repo-url>   # e.g. git@github.com:username/repo.git  or  https://github.com/username/repo.git
+cd <path-to-your-repo>
 .hooks/scripts/setup.sh
 
 # 3. Configure
-# edit repo.config.json with project details (scripts read from this)
-cp .github/templates/.gitignore.template .gitignore       # mega gitignore (set & forget)
-cp .github/templates/timeline.template.json timeline.json # AI agents auto-extend this
-cp .github/templates/TODOs.template.md TODOs.md
-cp -r .github/templates/_0 .
+# edit repo.config.json (project details; optional: remote.prefer or remote.origin_url — see Remote below)
+cp ".github/templates/.gitignore.template" ".gitignore"       # mega gitignore (set & forget)
+cp ".github/templates/timeline.template.json" "timeline.json" # AI agents auto-extend this
+cp ".github/templates/TODOs.template.md" "TODOs.md"
+cp -r ".github/templates/_0" .
 
 # 4. Last: replace this README with your project README (run only when done with setup)
 cp .github/templates/README.template.md README.md        # then replace PROJECT_NAME, USERNAME
 ```
 
 > **Step 2 is mandatory** — hooks don't activate until you run `setup.sh`.
+
+### Remote (SSH vs HTTPS)
+
+In `repo.config.json`, set **`remote`** to control `origin`:
+
+| Key | Values | Effect |
+|-----|--------|--------|
+| `prefer` | `"auto"` | Leave current URL as-is (default). |
+| `prefer` | `"ssh"` | Set origin to `git@host:slug.git` (derived from current URL). |
+| `prefer` | `"https"` | Set origin to `https://host/slug.git`. |
+| `origin_url` | `"git@github.com:user/repo.git"` or any URL | Overrides; use this to pin exact URL. |
+
+After editing, run **`.hooks/scripts/set-remote.sh`** (or re-run `setup.sh`). Hooks autodetect SSH vs HTTPS from `remote.origin.url`; no change needed in other scripts.
 
 <br/>
 
@@ -132,6 +147,7 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 | Script | Purpose |
 |--------|---------|
 | `setup.sh` | one-time setup after cloning (activates hooks) |
+| `set-remote.sh` | set origin from repo.config.json (remote.prefer or origin_url) |
 | `check-collaborator.sh` | forge-agnostic collaborator check (auto-detects from remote URL) |
 | `clearmeta.sh` | NUCLEAR metadata strip; note: Apple SIP-protected provenance may persist |
 | `gen-social.sh` | generate social preview image |

@@ -32,5 +32,10 @@
   "workflows": {
     "auto_share_to_main": true,
     "main_account": "vdutts7"
+  },
+  "remote": {
+    "_description": "prefer: ssh|https|auto. origin_url: explicit URL. Run .hooks/scripts/set-remote.sh",
+    "prefer": "auto",
+    "origin_url": null
   }
 }
