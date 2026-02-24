@@ -172,6 +172,7 @@ clear_xattrs() {
   xattr -d com.apple.macl "$file" 2>/dev/null || true
   xattr -d com.apple.lastuseddate#PS "$file" 2>/dev/null || true
   xattr -d com.apple.FinderInfo "$file" 2>/dev/null || true
+  xattr -d com.apple.provenance "$file" 2>/dev/null || true  # works when SIP off; no-op when SIP on
   
   # Clear any remaining (except SIP-protected ones)
   xattr -c "$file" 2>/dev/null || true
@@ -458,9 +459,11 @@ $FLAG_QUIET || echo "▸ NUKING..."
 $FLAG_QUIET || echo "───────────────────────────────────────────────────────────────"
 
 if [[ -d "$TARGET" ]]; then
-  # For directories, just use xattr -cr (can't byte-copy dirs)
+  # For directories: clear all xattrs (when SIP off, this removes provenance too)
   xattr -cr "$TARGET" 2>/dev/null && log_detail "✅ Cleared xattrs (recursive)" || log_detail "⚠️  Some attributes could not be cleared"
-  log_detail "ℹ️  Note: provenance on dirs may persist (SIP protected)"
+  # Explicit provenance strip (succeeds when SIP off; no-op when SIP on)
+  xattr -d com.apple.provenance "$TARGET" 2>/dev/null || true
+  log_detail "ℹ️  When SIP is on, provenance on dirs may still persist"
   log_detail "💡 Tip: Use -r flag to byte-copy all files inside: clearmeta -r $TARGET"
 else
   # For files: NUCLEAR treatment
