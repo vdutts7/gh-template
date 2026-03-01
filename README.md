@@ -15,7 +15,7 @@
 ```
 .hooks/
 ├── pre-commit              ← metadata strip + collaborator check
-├── pre-push                ← health check (large files, embedded repos)
+├── pre-push                ← Touch ID gate (shelllock) + health check (large files, embedded repos)
 ├── post-checkout           ← identity warning
 └── scripts/
     ├── setup.sh            ← one-time setup after clone
@@ -142,7 +142,7 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 | Hook | Trigger | What it does |
 |------|---------|-------------|
 | `pre-commit` | before commit | strips file metadata, checks collaborator access |
-| `pre-push` | before push | blocks large files (>90MB), embedded repos |
+| `pre-push` | before push | Touch ID gate when [shelllock](https://github.com/vdutts7/shelllock-macos) is installed (blocks AI push); then health check (large files, embedded repos) |
 | `post-checkout` | after checkout | warns if user.name doesn't match collaborator |
 
 ### Scripts
