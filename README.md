@@ -34,6 +34,9 @@
     ├── timeline.template.json  ← project timeline/milestones
     └── [agent configs]/        ← aider, claude, codex, cursor, etc.
 .gitconfig                  ← repo-level git config (core.hooksPath)
+git-template/               ← optional: Git init template (post-checkout reminder after clone)
+├── hooks/
+│   └── post-checkout       ← prints "Run .hooks/scripts/setup.sh" until setup is run
 assets/
 ├── icons/
 │   └── agents/                 
@@ -133,6 +136,8 @@ After editing, run **`.hooks/scripts/set-remote.sh`** (or re-run `setup.sh`). Ho
 Hooks live in `.hooks/` (not `.github/hooks/`) — works with any git forge (GitHub, GitLab, Codeberg, Gitea, Bitbucket, self-hosted).
 
 One-time setup after clone: `.hooks/scripts/setup.sh`
+
+**Post-clone reminder (optional):** To see a terminal message after every clone reminding you to run `setup.sh`, set Git's template once per machine (from this repo): `git config --global init.templateDir "$(pwd)/git-template"`. Then every new clone of any repo created from this template will print the reminder until you run `.hooks/scripts/setup.sh`. The template dir can live anywhere; point `init.templateDir` at it.
 
 | Hook | Trigger | What it does |
 |------|---------|-------------|
