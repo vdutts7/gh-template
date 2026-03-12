@@ -95,7 +95,7 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/copilot.webp" width="16"> | Copilot | `.github/copilot-instructions.md` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gemini.webp" width="16"> | Gemini | `GEMINI.md` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aider.webp" width="16"> | Aider | `.aider.conf.yml`, `CONVENTIONS.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/windsurf.webp" width="16"> | Windsurf | `.windsurfrules` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp" width="16"> | Windsurf | `.windsurfrules` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zed.webp" width="16"> | Zed | `.rules` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roo.webp" width="16"> | Roo | `.roomodes` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp" width="16"> | Codeium | `.codeiumignore` |
