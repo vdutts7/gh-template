@@ -1229,6 +1229,10 @@ _MCP_/
 .cline*
 .superset/*
 .goose/*
+.augment/*
+.junie/*
+.qodo/*
+.zencoder/*
 
 // TODO: add more + each one's respective ignore file
 
