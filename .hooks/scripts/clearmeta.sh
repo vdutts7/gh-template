@@ -1,8 +1,10 @@
 #!/bin/zsh
-# Self-contained metadata stripper for git hooks. No .cursor dependency.
+# .hooks/scripts/clearmeta.sh
+# self-contained metadata stripper for git hooks. No .cursor dependency
 # usage: clearmeta [ -r ] [ --pdf-safe | --mode=MODE ] <path>
 # requires: jq, file. Optional: exiftool (PDF), ffmpeg (media), magick+pdftotext (pdf_safe).
 # xattr used when available (macOS/Linux). Manual copy from canonical namespace when updating.
+
 setopt errexit pipefail 2>/dev/null || true
 CLEARMETA_REGISTRY='{"default_mode":"generic","mime_to_mode":{"application/pdf":"pdf_safe","audio/mpeg":"media","audio/mp4":"media","audio/x-m4a":"media","video/mp4":"media","video/quicktime":"media","video/x-matroska":"media","audio/flac":"media","audio/wav":"media","audio/ogg":"media","audio/webm":"media","application/octet-stream":"generic","text/plain":"generic","text/html":"generic"},"modes":{"pdf_safe":"clearmeta_pdf_safe","pdf_basic":"clearmeta_pdf_basic","media":"clearmeta_media","generic":"clearmeta_generic"}}'
 JQ=$(command -v jq 2>/dev/null) || JQ=jq

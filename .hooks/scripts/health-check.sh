@@ -1,5 +1,6 @@
 #!/bin/bash
-# health-check.sh - Git health check before commit/push
+# .hooks/scripts/health-check.sh
+# Git health check before commit/push
 # Checks: large files (>90MB), embedded git repos
 # Run: .github/scripts/health-check.sh [size_mb]
 

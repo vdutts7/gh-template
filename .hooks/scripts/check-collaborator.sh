@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Forge-agnostic collaborator check.
-# Auto-detects GitHub/GitLab/Codeberg/Gitea/Bitbucket from remote URL.
-# Exit: 0=authorized, 1=blocked, 2=indeterminate (caller decides)
+# .hooks/scripts/check-collaborator.sh
+# git-platform-agnostic collaborator check- auto-detects GitHub/GitLab/Codeberg/Gitea/Bitbucket from remote URL.
+# exit: 0=authorized, 1=blocked, 2=indeterminate (caller decides)
 
 lc() { echo "$1" | tr '[:upper:]' '[:lower:]'; }
 

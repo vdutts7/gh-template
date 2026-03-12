@@ -1,5 +1,6 @@
 #!/bin/bash
-# upload-cloudinary.sh - Upload assets to Cloudinary
+# .hooks/scripts/upload-cloudinary.sh
+# upload assets to Cloudinary
 # Reads from env vars (CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET) or repo.config.json
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"

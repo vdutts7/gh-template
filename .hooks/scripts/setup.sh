@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# One-time setup after clone. Zero deps.
+# .hooks/scripts/setup.sh
+# one-time setup post-clone- zero deps
+
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
