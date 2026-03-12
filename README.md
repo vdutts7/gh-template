@@ -172,5 +172,5 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 ## Contact
 
-<a href="https://vd7.io" style="display:inline-block;background:#000;color:#fff;padding:5px 14px;min-height:28px;box-sizing:border-box;border-radius:999px;border:1px solid rgba(255,255,255,0.25);text-decoration:none;font-size:12px;font-weight:500;font-family:'JetBrains Mono','SF Mono','Fira Code',monospace;vertical-align:middle;line-height:18px;"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773284159/vd7-website/vd7-circle.webp" alt="" width="18" height="18" style="vertical-align:middle;margin-right:6px;" />vd7.io</a>
-<a href="https://x.com/vdutts7" style="display:inline-block;background:#000;color:#fff;padding:5px 14px;min-height:28px;box-sizing:border-box;border-radius:999px;border:1px solid rgba(255,255,255,0.25);text-decoration:none;font-size:12px;font-weight:500;font-family:'JetBrains Mono','SF Mono','Fira Code',monospace;vertical-align:middle;line-height:18px;"><img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/x.webp" alt="" width="18" height="18" style="vertical-align:middle;margin-right:6px;" />/vdutts7</a>
+<a href="https://vd7.io"><img src="assets/badges/vd7-io.svg" alt="vd7.io" height="28" /></a>
+<a href="https://x.com/vdutts7"><img src="assets/badges/vdutts7.svg" alt="/vdutts7" height="28" /></a>

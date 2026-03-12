@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="28" viewBox="0 0 130 28">
+  <rect x="0" y="0" width="130" height="28" rx="14" ry="14" fill="#000" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+  <g transform="translate(6,4) scale(0.65)">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#fff"/>
+  </g>
+  <text x="32" y="18" fill="#fff" font-family="'JetBrains Mono','SF Mono','Fira Code',monospace" font-size="12" font-weight="500">/vdutts7</text>
+</svg>
