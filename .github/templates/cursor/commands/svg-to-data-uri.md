@@ -1,5 +1,5 @@
 ---
-id: svg-to-datauri
+id: svg-to-data-uri
 version: 1.0
 created: 2026-03-11
 category: workflow
@@ -14,7 +14,7 @@ usage_stats:
   invocations: 0
 ---
 
-# svg-to-datauri
+# svg-to-data-uri
 
 Convert one or more SVG files to `data:image/svg+xml;base64,...` data URIs. Modular utility for embedding SVGs (e.g. badges, icons) without external links.
 
@@ -52,9 +52,9 @@ enforcement:
 ## Implementation
 
 ```yaml
-script: "scripts/svg-to-datauri.sh"
-location: "repo root scripts/svg-to-datauri.sh (or copy to $HOME/.cursor/tools/)"
-usage: "svg-to-datauri.sh [--minify] <file.svg> [file2.svg ...]"
+script: "$CURTOOLS/scripts/svg-to-data-uri.sh"
+location: "$CURTOOLS/scripts/svg-to-data-uri.sh (source: .github/templates/cursor/scripts/svg-to-data-uri.sh in this repo; copy to CURTOOLS)"
+usage: "svg-to-data-uri.sh [--minify] <file.svg> [file2.svg ...]"
 output: "One data URI per input file, one per line"
 ```
 
@@ -62,11 +62,11 @@ output: "One data URI per input file, one per line"
 
 | Intent | Command |
 |--------|--------|
-| Single file | `scripts/svg-to-datauri.sh path/to/icon.svg` |
-| Multiple files | `scripts/svg-to-datauri.sh a.svg b.svg` |
-| Minified (smaller) | `scripts/svg-to-datauri.sh --minify path/to/icon.svg` |
+| Single file | `$CURTOOLS/scripts/svg-to-data-uri.sh path/to/icon.svg` |
+| Multiple files | `$CURTOOLS/scripts/svg-to-data-uri.sh a.svg b.svg` |
+| Minified (smaller) | `$CURTOOLS/scripts/svg-to-data-uri.sh --minify path/to/icon.svg` |
 | Inline in HTML | Use output as `src="<data-uri>"` in `<img>` |
 
 ## Script
 
-Bash 3.2+ compatible. Reads SVG, base64-encodes, prints `data:image/svg+xml;base64,<b64>`. Option `--minify` collapses whitespace before encoding.
+Bash 3.2+ compatible. Install: copy `.github/templates/cursor/scripts/svg-to-data-uri.sh` to `$CURTOOLS/scripts/svg-to-data-uri.sh`. Reads SVG, base64-encodes, prints `data:image/svg+xml;base64,<b64>`. Option `--minify` collapses whitespace before encoding.
