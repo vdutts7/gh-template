@@ -1,280 +1,165 @@
 ---
 id: timeline
-version: 3.0
+version: 4.0
 created: 2025-11-26
-updated: 2026-01-23
+updated: 2026-03-11
 category: data-operations
 layer: 1
 type: tool/basic
 
-chains_with:
-  - style-track: "track style milestones over time"
-  - amzn_slack_people_ellehong: "ellen_cya field generation"
+chains_with: []
 depends_on:
-  - grep: "timestamp extraction"
-  - jq: "json manipulation"
-  - find: "locate timeline files"
-used_by:
-  - style-track: "log significant style improvements"
+  - "date: current timestamp"
+  - "jq: read/write JSON"
+  - "git (optional): resolve repo root"
+used_by: []
+usage_stats:
+  invocations: 0
 
 operation: APPEND-ONLY
 ---
 
 # timeline
 
-```yaml
-mode: APPEND-ONLY
-target: "{workspace}/*.timeline.json"
-centralized: false
+**Definition / promise:** Append-only **project memory** — a timestamped ledger and makeshift database for full traceability and auditability. AI agents extend `timeline.json` (or `*.timeline.json`) as you work, or you invoke explicitly (e.g. `/timeline` or "update timeline"). **Why:** Context persists across sessions; when you return to a project, agents (or you) read the timeline to understand what happened, what decisions were made, and what's blocked.
 
-workspace_detection:
-  priority:
-    1: "active_file_path from {recent_context}"
-    2: "last_edited_file directory"
-    3: "cwd if contains .git or package.json or Cargo.toml"
-    4: "explicit user override"
-  
-  oncall_detection:
-    trigger: "pwd contains 'oncall' OR $ONCALL env var set"
-    behavior: |
-      if in $ONCALL repo or subdir:
-        1. find nearest *.timeline.json (search up from cwd)
-        2. MUST include ellen_cya and slack_update fields
-        3. auto-detect schema from last 10 entries
-    env_var: "$ONCALL"
-    typical_path: "~/Desktop/oncall"
-    subdir_pattern: "_0_/{sprint_folder}/"
-  
-  resolution:
-    - extract: "workspace root from {recent_context}"
-    - check: "is user in subdir? (e.g., ~/Desktop/oncall/_0_)"
-    - check_oncall: "is path under $ONCALL? if yes, use oncall_detection"
-    - resolve: "use deepest dir with project markers OR active working dir"
-    - validate: "dir exists and is writable"
+Operationally: locate existing `timeline.json` or `*.timeline.json` at workspace/git root, compute delta from last entry vs current session, append 1..n granular entries. No create; no org-specific logic.
 
-  project_markers:
-    - ".git"
-    - "package.json"
-    - "Cargo.toml"
-    - "pyproject.toml"
-    - "go.mod"
-    - "*.timeline.json"
+## Schema
 
-timeline_file:
-  pattern: "{project_name}.timeline.json"
-  location: "{resolved_workspace}/"
-  create_if_missing: true
-  
-  schema:
-    entries: "array"
-    entry:
-      ts: "ISO8601"
-      type: "string"
-      content: "string"
-      context: "object (optional)"
-      ellen_cya: "string (REQUIRED if oncall repo)"
-      slack_update: "string (REQUIRED if oncall repo)"
+### Command operation
 
-  schema_inference:
-    description: "auto-detect schema from last 10 entries before appending"
-    steps:
-      1: "read last 10 entries from timeline"
-      2: "extract all unique field names"
-      3: "identify required vs optional fields"
-      4: "new entry MUST include all fields present in majority (>50%) of last 10"
-    purpose: "maintain schema consistency without hardcoding"
-
-oncall_fields:
-  description: "REQUIRED fields when in $ONCALL repo"
-  ellen_cya:
-    description: "terse external-facing status optimized for Ellen optics"
-    format: "1-2 sentences, proactive, accountability-forward"
-    when_no_change: "ref:ts_{previous_entry_timestamp}"
-    source: "/amzn/slack/people/ellehong"
-  slack_update:
-    description: "ready-to-paste slack DM update for Ellen"
-    format: |
-      {terse status update}
-      
-      **refs**
-      - {full URL 1}
-      - {full URL 2}
-    link_style: "per /amzn/style/comment-style - all refs at bottom"
-
-append_operation:
-  steps:
-    1: "detect workspace from {recent_context}"
-    2: "check if oncall repo (pwd contains 'oncall' or under $ONCALL)"
-    3: "find *.timeline.json in resolved workspace"
-    4: "if not found, create {dirname}.timeline.json"
-    5: "read last 10 entries to infer schema"
-    6: "validate new entry has all required fields (including ellen_cya if oncall)"
-    7: "append new entry with timestamp"
-    8: "write back (atomic)"
-  
-  entry_template:
-    ts: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-    type: "{entry_type}"
-    content: "{entry_content}"
-    context:
-      workspace: "{resolved_workspace}"
-      file: "{active_file}"
-    ellen_cya: "{ellen_cya_text}"  # if oncall
-    slack_update: "{slack_update_text}"  # if oncall
-```
-
-## workspace resolution
-
-```bash
-# from {recent_context}, extract:
-# - cursor_workspace: top-level dir open in IDE
-# - active_subdir: actual working directory (may differ)
-# - active_file: currently edited file path
-
-resolve_workspace() {
-  local ctx_workspace="$1"   # from recent_context
-  local ctx_subdir="$2"      # from recent_context  
-  local ctx_file="$3"        # from recent_context
-  
-  # Priority: subdir > file's dir > workspace
-  if [[ -n "$ctx_subdir" && -d "$ctx_subdir" ]]; then
-    echo "$ctx_subdir"
-  elif [[ -n "$ctx_file" ]]; then
-    dirname "$ctx_file"
-  else
-    echo "$ctx_workspace"
-  fi
-}
-
-is_oncall_repo() {
-  local path="$1"
-  # Check if path contains 'oncall' or is under $ONCALL
-  if [[ "$path" == *"oncall"* ]] || [[ -n "$ONCALL" && "$path" == "$ONCALL"* ]]; then
-    return 0
-  fi
-  return 1
-}
-
-find_nearest_timeline() {
-  local dir="$1"
-  while [[ "$dir" != "/" ]]; do
-    local timeline=$(find "$dir" -maxdepth 1 -name "*.timeline.json" 2>/dev/null | head -1)
-    if [[ -n "$timeline" ]]; then
-      echo "$timeline"
-      return 0
-    fi
-    dir=$(dirname "$dir")
-  done
-  return 1
-}
-
-infer_schema_from_entries() {
-  local timeline_file="$1"
-  # Get last 10 entries and extract field names
-  jq -r '.entries[-10:] | map(keys) | add | unique | .[]' "$timeline_file" 2>/dev/null
+```json
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "type": "object",
+  "description": "Timeline command operation and entry shape (infer exact schema from target file)",
+  "properties": {
+    "target_file": { "type": "string", "pattern": "^(timeline\\.json|.+\\.timeline\\.json)$", "description": "Exactly timeline.json or <name>.timeline.json only; reject e.g. mytimeline.json" },
+    "ts": { "type": "string", "format": "date-time", "description": "ISO8601 from date -u +%Y-%m-%dT%H:%M:%SZ" },
+    "entry": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier (e.g. UUID); mandatory for file entry" },
+        "uuid": { "type": "string", "description": "Alias for id" },
+        "ts": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["milestone", "note", "decision", "blocker", "resolution", "investigation", "cleanup", "infra", "summary", "start"] },
+        "content": { "type": "string" },
+        "note": { "type": "string" },
+        "context": { "type": "object", "additionalProperties": true },
+        "operation": { "type": "string" }
+      },
+      "required": ["ts", "type"],
+      "additionalProperties": true
+    },
+    "entries_added": { "type": "integer", "minimum": 0, "description": "Count of new entries appended" }
+  },
+  "required": ["target_file", "ts"]
 }
 ```
 
-## append entry
+### timeline.json (file) schema
 
-```bash
-append_timeline_entry() {
-  local workspace="$1"
-  local entry_type="$2"
-  local content="$3"
-  local ellen_cya="$4"      # optional, required if oncall
-  local slack_update="$5"   # optional, required if oncall
-  
-  # Check if oncall repo
-  local is_oncall=false
-  if is_oncall_repo "$workspace"; then
-    is_oncall=true
-  fi
-  
-  # Find or create timeline file
-  local timeline_file
-  if $is_oncall; then
-    timeline_file=$(find_nearest_timeline "$workspace")
-  fi
-  
-  if [[ -z "$timeline_file" ]]; then
-    timeline_file=$(find "$workspace" -maxdepth 1 -name "*.timeline.json" | head -1)
-  fi
-  
-  if [[ -z "$timeline_file" ]]; then
-    local project_name=$(basename "$workspace")
-    timeline_file="${workspace}/${project_name}.timeline.json"
-    echo '{"entries":[]}' > "$timeline_file"
-  fi
-  
-  # Infer schema from last 10 entries
-  local schema_fields=$(infer_schema_from_entries "$timeline_file")
-  
-  # Validate oncall fields
-  if $is_oncall && [[ -z "$ellen_cya" ]]; then
-    echo "ERROR: ellen_cya field required in oncall repo" >&2
-    return 1
-  fi
-  
-  # Append entry (atomic)
-  local ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-  local tmp=$(mktemp)
-  
-  if $is_oncall; then
-    jq --arg ts "$ts" \
-       --arg type "$entry_type" \
-       --arg content "$content" \
-       --arg ws "$workspace" \
-       --arg ellen "$ellen_cya" \
-       --arg slack "$slack_update" \
-       '.entries += [{"ts":$ts,"type":$type,"content":$content,"context":{"workspace":$ws},"ellen_cya":$ellen,"slack_update":$slack}]' \
-       "$timeline_file" > "$tmp" && mv "$tmp" "$timeline_file"
-  else
-    jq --arg ts "$ts" \
-       --arg type "$entry_type" \
-       --arg content "$content" \
-       --arg ws "$workspace" \
-       '.entries += [{"ts":$ts,"type":$type,"content":$content,"context":{"workspace":$ws}}]' \
-       "$timeline_file" > "$tmp" && mv "$tmp" "$timeline_file"
-  fi
+**Flexible schema:** only a small set of fields are mandatory; all others are optional and may be dropped, added, or extended at any time. Infer from the existing file; new entries must include the mandatory fields and may include any predicted or custom fields.
+
+- **Mandatory (fixed):** file must have `entries` (array). Each entry must have a unique **identifier** (`id` or `uuid`).
+- **Predicted optional (entry):** `ts`, `type`, `content`, `note`, `context`, `operation` — use if present in the file; omit or add others as needed.
+- **Predicted optional (top-level):** `meta`, `status`, `goal`, `last_updated`, `decisions`, `blockers`, `learnings` — same rule.
+- **Extension:** any field may be dropped, added, or new keys included; `additionalProperties: true` everywhere. Only mandatory fields are enforced.
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "$id": "https://gh-template/timeline.json/schema",
+  "title": "timeline.json",
+  "description": "Append-only event ledger; flexible schema. Mandatory: entries[], entry.id. All other fields optional; add/drop/extend as needed.",
+  "type": "object",
+  "required": ["entries"],
+  "properties": {
+    "entries": {
+      "type": "array",
+      "description": "Append-only list of events; never modify or delete existing items",
+      "items": { "$ref": "#/$defs/entry" }
+    },
+    "meta": { "type": "object", "additionalProperties": true },
+    "status": { "type": "string" },
+    "goal": {},
+    "last_updated": { "type": "string", "format": "date-time" },
+    "decisions": { "type": "array" },
+    "blockers": { "type": "array" },
+    "learnings": { "type": "array" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "description": "One event. Mandatory: id (or uuid). All other fields optional; add/drop/extend as needed.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier (e.g. UUID); mandatory" },
+        "uuid": { "type": "string", "description": "Alias for id; use id or uuid per file convention" },
+        "ts": { "type": "string", "format": "date-time" },
+        "type": { "type": "string" },
+        "content": { "type": "string" },
+        "note": { "type": "string" },
+        "context": { "type": "object", "additionalProperties": true },
+        "operation": { "type": "string" }
+      },
+      "required": [],
+      "oneOf": [
+        { "required": ["id"] },
+        { "required": ["uuid"] }
+      ],
+      "additionalProperties": true
+    }
+  }
 }
 ```
 
-## usage
+When appending: generate a new identifier for each entry (e.g. UUID or unique string). Preserve existing field set from the file; only add mandatory `id`/`uuid` if the file's entries already use it. Existing entries in the file may lack `id`/`uuid`; the command only enforces an identifier on newly appended entries.
+
+## Execution Rules
 
 ```yaml
-invoke:
-  implicit: "agent detects from {recent_context}"
-  explicit: "/timeline add <type> <content>"
+logic:
+  resolve_root: "workspace root or git root from {recent_context}; do not search up from cwd"
+  locate: "at root accept only timeline.json or <name>.timeline.json (one dot before 'timeline'); reject names like mytimeline.json; if none, stop"
+  read: "last entry in entries[] + top-level metadata/schema"
+  timestamp: "date -u +%Y-%m-%dT%H:%M:%SZ"
+  delta: "compare last entry to current chat session (as far back as recall); identify changes, decisions, blockers, milestones"
+  granularity: "entries_added = f(amount of change + context updates); not f(time since last entry)"
+  append: "push 1..n entries to entries[]; conform to existing schema; optionally set last_updated"
 
-examples:
-  - "/timeline add milestone 'completed auth refactor'"
-  - "/timeline add note 'investigating memory leak'"
-  - "/timeline add decision 'chose postgres over sqlite'"
-  
-  # oncall repo examples (ellen_cya auto-generated)
-  - "/timeline add blocker 'blocked on MPA approval'"
-  - "/timeline add investigation 'verified alarms in cloudwatch'"
+validation:
+  - "target_file is exactly timeline.json OR <name>.timeline.json (dot required before 'timeline'); reject mytimeline.json and similar"
+  - "target_file exists and is writable"
+  - "never modify or delete existing entries"
+  - "new entries include identifier (id or uuid); match other fields to schema inferred from existing entries and top-level keys"
 
-entry_types:
-  - milestone
-  - note  
-  - decision
-  - blocker
-  - resolution
-  - investigation
-  - standup
-  - artifacts
+enforcement:
+  - "APPEND-ONLY"
+  - "Single file at root only"
+  - "No creation of timeline file"
+  - "Agnostic: no org-specific or proprietary fields"
 ```
 
-## constraints
+## Implementation
 
 ```yaml
-strict:
-  - "APPEND-ONLY: never modify/delete existing entries"
-  - "NO centralized file: each project has own timeline"
-  - "workspace detection MUST use {recent_context}"
-  - "subdir takes precedence over parent workspace"
-  - "oncall repo MUST include ellen_cya and slack_update fields"
-  - "schema inference from last 10 entries before append"
+script: "agent-driven (no binary); uses date, jq, optional git"
+usage: "implicit (agent) or explicit ('update timeline' / 'append to timeline')"
+output: "updated timeline.json or *.timeline.json with new entries; preserve meta, goal, decisions, blockers, etc."
+steps:
+  - "resolve workspace/git root"
+  - "find timeline.json or <name>.timeline.json at root only (reject mytimeline.json-style names); exit if missing"
+  - "read file; infer schema from entries and top-level keys"
+  - "compute delta (session vs last entry); decide N entries"
+  - "for each entry: generate id (e.g. UUID); ts from date; type; content or note; optional context/operation; preserve or add fields per file convention"
+  - "append to entries[]; write back; set last_updated if present"
 ```
+
+## Quick Reference
+
+| Intent | Action |
+|--------|--------|
+| Update timeline | Compute delta, append to timeline.json or <name>.timeline.json at root (not mytimeline.json) |
+| Entry shape | id or uuid (mandatory), ts, type, content|note, optional context/operation; flexible — add/drop fields per file |

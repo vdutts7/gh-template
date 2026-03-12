@@ -35,7 +35,7 @@ upload_file() {
         -F "folder=gh-repos/$REPO_NAME")
     
     if [[ $? -eq 0 ]]; then
-        URL=$(echo "$RESPONSE" | jq -r '.secure_url')
+        URL=$(printf '%s' "$RESPONSE" | jq -r '.secure_url')
         echo "$URL"
     else
         echo ""

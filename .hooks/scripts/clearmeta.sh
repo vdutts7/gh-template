@@ -1,502 +1,153 @@
 #!/bin/zsh
-# pwd: ~/scripts OR .github/scripts (repo template)
-# chmod: chmod +x clearmeta.sh
-# purpose: NUCLEAR metadata stripper - nukes ALL privacy-leaking metadata (xattrs, EXIF, embedded media)
-# usage: clearmeta <file>           - clear metadata from single file
-#        clearmeta -r <directory>   - recursively clear metadata from all files in directory
-#        clearmeta -d <directory>   - dry-run (show what would be cleaned)
-# notes: com.apple.provenance may persist but it's LOCAL-ONLY and doesn't leak externally
-
-setopt pipefail 2>/dev/null || true
-set -eo pipefail
-
-# ─────────────────────────────────────────────────────────────────
-# Feature flags
-# ─────────────────────────────────────────────────────────────────
-FLAG_RECURSIVE=false
-FLAG_DRY_RUN=false
-FLAG_VERBOSE=false
-FLAG_QUIET=false
-TARGET=""
-
-# ─────────────────────────────────────────────────────────────────
-# Parse flags
-# ─────────────────────────────────────────────────────────────────
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -r|--recursive) FLAG_RECURSIVE=true; shift ;;
-    -d|--dry-run) FLAG_DRY_RUN=true; shift ;;
-    -v|--verbose) FLAG_VERBOSE=true; shift ;;
-    -q|--quiet) FLAG_QUIET=true; shift ;;
-    -h|--help) 
-      /bin/cat << 'EOF'
-Usage: clearmeta [options] <file|directory>
-
-NUCLEAR metadata stripper - nukes ALL metadata including SIP-protected provenance.
-
-Strips:
-  - macOS xattrs (WhereFroms, quarantine, download date, provenance)
-  - EXIF/XMP/IPTC (GPS, author, camera, timestamps via exiftool)
-  - Embedded media metadata (ID3 tags, cover art via ffmpeg)
-  - SIP-protected provenance (via byte-copy trick)
-
-Options:
-  -r, --recursive   Process all files in directory recursively
-  -d, --dry-run     Show what would be cleaned (no changes)
-  -v, --verbose     Show detailed output
-  -q, --quiet       Minimal output (errors only)
-  -h, --help        Show this help
-
-Examples:
-  clearmeta ~/Downloads/file.pdf        # single file
-  clearmeta -r ~/Downloads              # recursive directory
-  clearmeta -d -r ~/Downloads           # dry-run recursive
-  clearmeta -v file.png                 # verbose single file
-
-EOF
-      exit 0
-      ;;
-    -*) echo "🔴 Unknown option: $1"; exit 1 ;;
-    *) TARGET="$1"; shift ;;
-  esac
-done
-
-# ─────────────────────────────────────────────────────────────────
-# Logging helpers
-# ─────────────────────────────────────────────────────────────────
-log_info() { $FLAG_QUIET || echo "🟢 $1"; return 0; }
-log_warn() { $FLAG_QUIET || echo "🟡 $1"; return 0; }
-log_error() { echo "🔴 $1"; return 0; }
-log_verbose() { $FLAG_VERBOSE && ! $FLAG_QUIET && echo "  [verbose] $1"; return 0; }
-log_detail() { $FLAG_QUIET || echo "  $1"; return 0; }
-
-# ─────────────────────────────────────────────────────────────────
-# Cleanup handler
-# ─────────────────────────────────────────────────────────────────
-cleanup() {
-  local exit_code=$?
-  setopt nullglob
-  for f in /tmp/clearmeta_$$_*; do
-    [[ -e "$f" ]] && rm -f "$f" 2>/dev/null
-  done
-  exit $exit_code
+# Self-contained metadata stripper for git hooks. No .cursor dependency.
+# usage: clearmeta [ -r ] [ --pdf-safe | --mode=MODE ] <path>
+# requires: jq, file. Optional: exiftool (PDF), ffmpeg (media), magick+pdftotext (pdf_safe).
+# xattr used when available (macOS/Linux). Manual copy from canonical namespace when updating.
+setopt errexit pipefail 2>/dev/null || true
+CLEARMETA_REGISTRY='{"default_mode":"generic","mime_to_mode":{"application/pdf":"pdf_safe","audio/mpeg":"media","audio/mp4":"media","audio/x-m4a":"media","video/mp4":"media","video/quicktime":"media","video/x-matroska":"media","audio/flac":"media","audio/wav":"media","audio/ogg":"media","audio/webm":"media","application/octet-stream":"generic","text/plain":"generic","text/html":"generic"},"modes":{"pdf_safe":"clearmeta_pdf_safe","pdf_basic":"clearmeta_pdf_basic","media":"clearmeta_media","generic":"clearmeta_generic"}}'
+JQ=$(command -v jq 2>/dev/null) || JQ=jq
+get_mime() {
+  local path="$1" mime=""
+  [[ -z "$path" || ! -e "$path" ]] && return 1
+  mime=$(file -bI "$path" 2>/dev/null | sed 's/;.*//' | tr -d ' \n')
+  [[ -z "$mime" ]] && return 1
+  printf '%s' "$mime"
 }
-trap cleanup EXIT INT TERM
-
-# ─────────────────────────────────────────────────────────────────
-# Check available tools
-# ─────────────────────────────────────────────────────────────────
-HAS_EXIFTOOL=false
-HAS_FFMPEG=false
-command -v exiftool &>/dev/null && HAS_EXIFTOOL=true
-command -v ffmpeg &>/dev/null && HAS_FFMPEG=true
-
-# ─────────────────────────────────────────────────────────────────
-# Media file extensions that have embedded metadata (ID3, etc)
-# ─────────────────────────────────────────────────────────────────
-MEDIA_EXTENSIONS="mp3|mp4|m4a|m4v|mov|mkv|avi|flac|wav|ogg|opus|webm|aac|wma|wmv|aiff|ape"
-
-# ─────────────────────────────────────────────────────────────────
-# Strip embedded media metadata via ffmpeg
-# ─────────────────────────────────────────────────────────────────
-strip_media_metadata() {
-  local file="$1"
-  local quiet="$2"
-  local ext="${file##*.}"
-  ext="${ext:l}"  # zsh lowercase
-  
-  # Check if ffmpeg is available
-  if ! $HAS_FFMPEG; then
-    [[ "$quiet" != "quiet" ]] && log_detail "⚠️  ffmpeg not installed, skipping embedded metadata"
-    return 1
-  fi
-  
-  # Check if this is a media file
-  if [[ ! "$ext" =~ ^($MEDIA_EXTENSIONS)$ ]]; then
-    return 0  # Not a media file, nothing to do
-  fi
-  
-  local tmp_file="/tmp/clearmeta_$$_ffmpeg"
-  
-  # Strip all metadata and cover art, copy streams without re-encoding
-  # -map 0:a = audio only (drops cover art video stream)
-  # -map_metadata -1 = strip all metadata
-  # -c:a copy = copy audio without re-encoding
-  if ffmpeg -i "$file" -map 0:a -map_metadata -1 -c:a copy "$tmp_file" -y -loglevel error 2>/dev/null; then
-    if [[ -s "$tmp_file" ]]; then
-      # Preserve permissions
-      chmod "$(stat -f "%Lp" "$file" 2>/dev/null || echo "644")" "$tmp_file" 2>/dev/null
-      if mv "$tmp_file" "$file" 2>/dev/null; then
-        [[ "$quiet" != "quiet" ]] && log_detail "✅ Stripped embedded media metadata (ffmpeg)"
-        return 0
-      fi
-    fi
-  fi
-  
-  rm -f "$tmp_file" 2>/dev/null
-  [[ "$quiet" != "quiet" ]] && log_detail "ℹ️  Media metadata already clean or no audio stream"
+get_mode_for_file() {
+  local path="$1" explicit="$2" mime="" mode=""
+  [[ -n "$explicit" ]] && mode="$explicit" || {
+    mime=$(get_mime "$path") || { echo "clearmeta: could not get MIME for $path" >&2; return 1; }
+    mode=$(printf '%s' "$CLEARMETA_REGISTRY" | "$JQ" --arg m "$mime" --arg wild "${mime%%/*}/*" -re '.mime_to_mode[$m] // .mime_to_mode[$wild] // .default_mode' 2>/dev/null) || { echo "clearmeta: unknown MIME $mime" >&2; return 1; }
+  }
+  [[ -z "$mode" ]] && return 1
+  printf '%s' "$mode"
+}
+clearmeta_generic_filesystem_only() {
+  local file="$1" quiet="${2:-}"
+  command -v xattr >/dev/null 2>&1 && {
+    xattr -d com.apple.metadata:kMDItemWhereFroms "$file" 2>/dev/null
+    xattr -d com.apple.metadata:kMDItemDownloadedDate "$file" 2>/dev/null
+    xattr -d com.apple.quarantine "$file" 2>/dev/null
+    xattr -d com.apple.macl "$file" 2>/dev/null
+    xattr -c "$file" 2>/dev/null
+  }
+  [[ "$quiet" != "quiet" ]] && echo "  Nuked xattrs"
   return 0
 }
-
-# ─────────────────────────────────────────────────────────────────
-# Strip EXIF/XMP/IPTC metadata via exiftool
-# ─────────────────────────────────────────────────────────────────
-strip_exif_metadata() {
-  local file="$1"
-  local quiet="$2"
-  
-  if ! $HAS_EXIFTOOL; then
-    [[ "$quiet" != "quiet" ]] && log_detail "⚠️  exiftool not installed, skipping EXIF/XMP/IPTC"
-    return 1
-  fi
-  
-  if exiftool -all= -overwrite_original -q -q "$file" 2>/dev/null; then
-    [[ "$quiet" != "quiet" ]] && log_detail "✅ Stripped EXIF/XMP/IPTC metadata (exiftool)"
-    return 0
-  fi
-  
-  return 0  # Not an error if file type not supported
-}
-
-# ─────────────────────────────────────────────────────────────────
-# Clear xattrs (WhereFroms, quarantine, etc)
-# ─────────────────────────────────────────────────────────────────
-clear_xattrs() {
-  local file="$1"
-  local quiet="$2"
-  
-  # Delete specific problematic xattrs first
-  xattr -d com.apple.metadata:kMDItemWhereFroms "$file" 2>/dev/null || true
-  xattr -d com.apple.metadata:kMDItemDownloadedDate "$file" 2>/dev/null || true
-  xattr -d com.apple.quarantine "$file" 2>/dev/null || true
-  xattr -d com.apple.macl "$file" 2>/dev/null || true
-  xattr -d com.apple.lastuseddate#PS "$file" 2>/dev/null || true
-  xattr -d com.apple.FinderInfo "$file" 2>/dev/null || true
-  xattr -d com.apple.provenance "$file" 2>/dev/null || true  # works when SIP off; no-op when SIP on
-  
-  # Clear any remaining (except SIP-protected ones)
-  xattr -c "$file" 2>/dev/null || true
-  
-  [[ "$quiet" != "quiet" ]] && log_detail "✅ Cleared xattrs (WhereFroms, quarantine, etc)"
-  return 0
-}
-
-# ─────────────────────────────────────────────────────────────────
-# NUCLEAR: Clear ALL metadata from a single file
-# Uses rsync method to nuke even SIP-protected provenance
-# (rsync doesn't preserve xattrs by default)
-# ─────────────────────────────────────────────────────────────────
-nuke_file() {
-  local file="$1"
-  local quiet="$2"
-  local ext="${file##*.}"
-  ext="${ext:l}"  # zsh lowercase
-  
-  # Skip if not a regular file
-  [[ ! -f "$file" ]] && return 0
-  
-  # Skip .git internals
-  [[ "$file" == *"/.git/"* ]] && return 0
-  
-  log_verbose "Processing: $file"
-  
-  # LAYER 1: Strip EXIF/XMP/IPTC first (before rsync destroys file structure for some formats)
-  strip_exif_metadata "$file" "$quiet" || true
-  
-  # LAYER 2: For media files, strip embedded metadata (ID3, cover art)
-  if [[ "$ext" =~ ^($MEDIA_EXTENSIONS)$ ]]; then
-    strip_media_metadata "$file" "$quiet"
-    clear_xattrs "$file" "$quiet"
-    return 0
-  fi
-  
-  # LAYER 3: Use rsync to nuke ALL xattrs including SIP-protected provenance
-  # macOS rsync doesn't copy xattrs by default (no -E flag)
-  local tmp_file="/tmp/clearmeta_$$_rsync"
-  local perms
-  perms=$(stat -f "%Lp" "$file" 2>/dev/null || echo "644")
-  
-  if rsync -a "$file" "$tmp_file" 2>/dev/null; then
-    # Verify copy succeeded
-    if [[ -s "$tmp_file" ]]; then
-      chmod "$perms" "$tmp_file" 2>/dev/null || true
-      if mv "$tmp_file" "$file" 2>/dev/null; then
-        [[ "$quiet" != "quiet" ]] && log_detail "✅ NUKED all metadata (rsync --no-xattrs)"
-        return 0
-      fi
-    fi
-  fi
-  
-  rm -f "$tmp_file" 2>/dev/null
-  
-  # FALLBACK: Try byte-copy method
-  tmp_file="/tmp/clearmeta_$$_bytecopy"
-  if /bin/cat "$file" > "$tmp_file" 2>/dev/null; then
-    chmod "$perms" "$tmp_file" 2>/dev/null || true
+clearmeta_generic_file() {
+  local file="$1" quiet="${2:-}" tmp_file="${file}.clearmeta_tmp_$$" mode=""
+  if cat "$file" > "$tmp_file" 2>/dev/null; then
+    mode=$(stat -c '%a' "$file" 2>/dev/null) || mode=$(stat -f '%Lp' "$file" 2>/dev/null)
+    chmod --reference="$file" "$tmp_file" 2>/dev/null || chmod "$mode" "$tmp_file" 2>/dev/null
     if mv "$tmp_file" "$file" 2>/dev/null; then
-      [[ "$quiet" != "quiet" ]] && log_detail "✅ NUKED all metadata (byte-copy)"
+      [[ "$quiet" != "quiet" ]] && echo "  Nuked ALL metadata (byte-copy)"
       return 0
     fi
+    rm -f "$tmp_file" 2>/dev/null
   fi
-  
-  rm -f "$tmp_file" 2>/dev/null
-  
-  # LAST RESORT: Just clear what we can with xattr
-  clear_xattrs "$file" "$quiet"
-  [[ "$quiet" != "quiet" ]] && log_detail "⚠️  rsync/byte-copy failed, fell back to xattr"
+  clearmeta_generic_filesystem_only "$file" "$quiet"
+  [[ "$quiet" != "quiet" ]] && echo "  Byte-copy failed, cleared xattrs only"
   return 1
 }
-
-# ─────────────────────────────────────────────────────────────────
-# Check file for metadata (dry-run mode)
-# ─────────────────────────────────────────────────────────────────
-check_file_metadata() {
-  local file="$1"
-  local has_meta=false
-  local details=""
-  
-  # Skip if not a regular file
-  [[ ! -f "$file" ]] && return 0
-  
-  # Skip .git internals
-  [[ "$file" == *"/.git/"* ]] && return 0
-  
-  # Check xattrs (exclude com.apple.provenance which we can't remove on macOS 15+)
-  local xattr_list
-  xattr_list=$(xattr "$file" 2>/dev/null | grep -v "com.apple.provenance" || true)
-  if [[ -n "$xattr_list" ]]; then
-    has_meta=true
-    local xattr_count
-    xattr_count=$(echo "$xattr_list" | wc -l | /usr/bin/tr -d ' ')
-    details="$details xattrs:$xattr_count"
+clearmeta_media() {
+  local file="$1" quiet="${2:-}" tmp_file="${file}.ffmpeg_tmp_$$"
+  if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "clearmeta: ffmpeg not found" >&2
+    return 1
   fi
-  
-  # Check EXIF metadata (only count privacy-relevant tags, not structural)
-  if $HAS_EXIFTOOL; then
-    local exif_privacy
-    # Only count tags that could leak privacy info (exclude structural metadata)
-    exif_privacy=$(exiftool -q -q -s \
-      -Author -Creator -Artist -Copyright -Rights -Owner \
-      -GPSLatitude -GPSLongitude -GPSPosition -GPSCoordinates \
-      -Make -Model -Software -HostComputer \
-      -Comment -UserComment -Description -Title -Subject \
-      -CreateDate -DateTimeOriginal -ModifyDate \
-      -SerialNumber -LensSerialNumber \
-      "$file" 2>/dev/null | wc -l | /usr/bin/tr -d ' ')
-    if [[ "$exif_privacy" -gt 0 ]]; then
-      has_meta=true
-      details="$details exif:$exif_privacy"
-    fi
+  if ffmpeg -i "$file" -map 0:a -map_metadata -1 -c:a copy "$tmp_file" -y -loglevel error 2>/dev/null && [[ -s "$tmp_file" ]] && mv "$tmp_file" "$file" 2>/dev/null; then
+    [[ "$quiet" != "quiet" ]] && echo "  Stripped embedded media metadata (ffmpeg)"
+  else
+    rm -f "$tmp_file" 2>/dev/null
   fi
-  
-  if $has_meta; then
-    echo "  would clean: $file ($details)"
-    return 1  # Signal has metadata
-  fi
+  command -v xattr >/dev/null 2>&1 && {
+    xattr -d com.apple.metadata:kMDItemWhereFroms "$file" 2>/dev/null
+    xattr -d com.apple.quarantine "$file" 2>/dev/null
+    xattr -c "$file" 2>/dev/null
+  }
   return 0
 }
-
-# ─────────────────────────────────────────────────────────────────
-# Prompt for target if not provided
-# ─────────────────────────────────────────────────────────────────
-if [[ -z "$TARGET" ]]; then
-  echo -n "Enter file/directory path [default: $PWD]: "
-  read -r TARGET
-  [[ -z "$TARGET" ]] && TARGET="$PWD"
-fi
-
-# Expand path (handle ~, variables, etc)
-TARGET="${TARGET/#\~/$HOME}"
-if [[ -e "$TARGET" ]]; then
-  TARGET=$(cd "$(dirname "$TARGET")" 2>/dev/null && pwd)/$(basename "$TARGET")
-else
-  log_error "Not found: $TARGET"
-  exit 1
-fi
-
-# ─────────────────────────────────────────────────────────────────
-# Show tool status
-# ─────────────────────────────────────────────────────────────────
-if ! $FLAG_QUIET; then
-  echo ""
-  echo "═══════════════════════════════════════════════════════════════"
-  echo "NUCLEAR METADATA STRIPPER"
-  echo "═══════════════════════════════════════════════════════════════"
-  echo ""
-  echo "▸ Tools available:"
-  $HAS_EXIFTOOL && echo "  exiftool: ✅ (EXIF/XMP/IPTC)" || echo "  exiftool: ❌ (install: brew install exiftool)"
-  $HAS_FFMPEG && echo "  ffmpeg:   ✅ (embedded media)" || echo "  ffmpeg:   ❌ (install: brew install ffmpeg)"
-  echo "  xattr:    ✅ (macOS built-in)"
-  echo "  rsync:    ✅ (strips xattrs including provenance)"
-  echo ""
-fi
-
-# ─────────────────────────────────────────────────────────────────
-# DRY-RUN MODE
-# ─────────────────────────────────────────────────────────────────
-if $FLAG_DRY_RUN; then
-  log_info "DRY-RUN mode - scanning: $TARGET"
-  echo "───────────────────────────────────────────────────────────────"
-  
-  total=0
-  has_meta=0
-  
-  if [[ -d "$TARGET" ]]; then
-    # Use temp file to avoid subshell variable loss (SHELL-003)
-    local tmpfile="/tmp/clearmeta_$$_files"
-    find "$TARGET" -type f -not -path "*/.git/*" > "$tmpfile" 2>/dev/null
-    
-    while IFS= read -r file; do
-      [[ -z "$file" ]] && continue
-      total=$((total + 1))
-      check_file_metadata "$file" || has_meta=$((has_meta + 1))
-    done < "$tmpfile"
-    
-    rm -f "$tmpfile" 2>/dev/null
-  else
-    total=1
-    check_file_metadata "$TARGET" || has_meta=1
+clearmeta_pdf_basic() {
+  local file="$1" quiet="${2:-}"
+  if ! command -v exiftool >/dev/null 2>&1; then
+    echo "clearmeta: exiftool required for PDF" >&2
+    return 1
   fi
-  
-  echo ""
-  log_info "Scanned $total files, $has_meta have metadata to strip"
-  echo "═══════════════════════════════════════════════════════════════"
-  exit 0
-fi
-
-# ─────────────────────────────────────────────────────────────────
-# RECURSIVE MODE
-# ─────────────────────────────────────────────────────────────────
-if $FLAG_RECURSIVE; then
-  if [[ ! -d "$TARGET" ]]; then
-    log_error "-r flag requires a directory, but got: $TARGET"
-    exit 1
+  exiftool -all= "$file" -overwrite_original -q 2>/dev/null || return 1
+  clearmeta_generic_file "$file" "$quiet"
+  return $?
+}
+clearmeta_pdf_safe() {
+  local file="$1" quiet="${2:-}" flat="${file}.flat_$$.pdf"
+  for cmd in magick exiftool pdftotext; do
+    command -v "$cmd" >/dev/null 2>&1 || { echo "clearmeta: $cmd required for pdf_safe" >&2; return 1; }
+  done
+  magick -density 200 "$file" -compress jpeg -quality 85 "$flat" 2>/dev/null || { echo "clearmeta: magick flatten failed" >&2; return 1; }
+  exiftool -all= "$flat" -overwrite_original -q 2>/dev/null
+  clearmeta_generic_file "$flat" "quiet"
+  if mv "$flat" "$file" 2>/dev/null; then
+    [[ "$quiet" != "quiet" ]] && echo "  Flattened, stripped metadata, nuked xattrs"
+    pdftotext "$file" - 2>/dev/null | head -50 | grep -q . && echo "  Warning: text layer present" >&2
+    return 0
   fi
-  
-  $FLAG_QUIET || echo "▸ Target: $TARGET"
-  $FLAG_QUIET || echo "───────────────────────────────────────────────────────────────"
-  
-  # Count files first
-  total_files=$(find "$TARGET" -type f -not -path "*/.git/*" 2>/dev/null | wc -l | /usr/bin/tr -d ' ')
-  $FLAG_QUIET || echo "▸ Found $total_files files to process"
-  $FLAG_QUIET || echo ""
-  
-  success_count=0
-  fail_count=0
-  
-  # Use temp file to avoid subshell variable loss (SHELL-003)
-  local tmpfile="/tmp/clearmeta_$$_files"
-  find "$TARGET" -type f -not -path "*/.git/*" > "$tmpfile" 2>/dev/null
-  
-  while IFS= read -r file; do
-    [[ -z "$file" ]] && continue
-    
-    # Show relative path for cleaner output
-    rel_path="${file#$TARGET/}"
-    [[ "$rel_path" == "$file" ]] && rel_path="$file"
-    
-    if $FLAG_QUIET; then
-      nuke_file "$file" "quiet" && success_count=$((success_count + 1)) || fail_count=$((fail_count + 1))
-    else
-      printf "  %-55s " "$rel_path"
-      if nuke_file "$file" "quiet"; then
-        echo "✅"
-        success_count=$((success_count + 1))
-      else
-        echo "⚠️"
-        fail_count=$((fail_count + 1))
-      fi
-    fi
-  done < "$tmpfile"
-  
-  rm -f "$tmpfile" 2>/dev/null
-  
-  # Also clear xattrs on directories themselves
-  $FLAG_QUIET || echo ""
-  $FLAG_QUIET || echo "▸ Clearing directory xattrs..."
-  xattr -cr "$TARGET" 2>/dev/null || true
-  $FLAG_QUIET || echo "  ✅ Cleared xattrs on directories"
-  
-  # Summary
-  echo ""
-  echo "═══════════════════════════════════════════════════════════════"
-  echo "▸ SUMMARY"
-  echo "───────────────────────────────────────────────────────────────"
-  echo "  Files processed: $total_files"
-  echo "  Success: $success_count"
-  echo "  Warnings: $fail_count"
-  echo "═══════════════════════════════════════════════════════════════"
-  exit 0
-fi
-
-# ─────────────────────────────────────────────────────────────────
-# SINGLE FILE/DIRECTORY MODE
-# ─────────────────────────────────────────────────────────────────
-$FLAG_QUIET || echo "▸ Target: $TARGET"
-$FLAG_QUIET || echo "───────────────────────────────────────────────────────────────"
-
-# Show BEFORE state
-if ! $FLAG_QUIET; then
-  echo ""
-  echo "▸ BEFORE"
-  echo "───────────────────────────────────────────────────────────────"
-  xattrs_before=$(xattr "$TARGET" 2>/dev/null || true)
-  if [[ -n "$xattrs_before" ]]; then
-    echo "$xattrs_before" | sed 's/^/  /'
-  else
-    echo "  (no xattrs)"
+  rm -f "$flat" 2>/dev/null
+  return 1
+}
+clearmeta_main() {
+  local target="$1" recursive="${2:-false}" explicit_mode="$3" mode="" handler="" f=""
+  printf '%s' "$CLEARMETA_REGISTRY" | "$JQ" -e ".modes[.default_mode]" >/dev/null 2>&1 || { echo "clearmeta: invalid registry" >&2; return 1; }
+  if [[ "$recursive" == true ]]; then
+    [[ ! -d "$target" ]] && { echo "clearmeta: -r requires directory" >&2; return 1; }
+    while IFS= read -r f; do
+      [[ -z "$f" || ! -f "$f" ]] && continue
+      mode=$(get_mode_for_file "$f" "$explicit_mode") || return 1
+      handler=$(printf '%s' "$CLEARMETA_REGISTRY" | "$JQ" --arg m "$mode" -re '.modes[$m]') || return 1
+      case "$handler" in
+        clearmeta_generic) clearmeta_generic_file "$f" "quiet" ;;
+        clearmeta_media) clearmeta_media "$f" "quiet" ;;
+        clearmeta_pdf_basic) clearmeta_pdf_basic "$f" "quiet" ;;
+        clearmeta_pdf_safe) clearmeta_pdf_safe "$f" "quiet" ;;
+        *) echo "clearmeta: unknown handler $handler" >&2; return 1 ;;
+      esac
+    done < <(find "$target" -type f 2>/dev/null)
+    command -v xattr >/dev/null 2>&1 && xattr -cr "$target" 2>/dev/null
+    return 0
   fi
-  
-  if $HAS_EXIFTOOL && [[ -f "$TARGET" ]]; then
-    exif_count=$(exiftool -q -q -s "$TARGET" 2>/dev/null | wc -l | /usr/bin/tr -d ' ')
-    echo "  EXIF/XMP/IPTC tags: $exif_count"
-  fi
-fi
-
-# Process
-$FLAG_QUIET || echo ""
-$FLAG_QUIET || echo "▸ NUKING..."
-$FLAG_QUIET || echo "───────────────────────────────────────────────────────────────"
-
-if [[ -d "$TARGET" ]]; then
-  # For directories: clear all xattrs (when SIP off, this removes provenance too)
-  xattr -cr "$TARGET" 2>/dev/null && log_detail "✅ Cleared xattrs (recursive)" || log_detail "⚠️  Some attributes could not be cleared"
-  # Explicit provenance strip (succeeds when SIP off; no-op when SIP on)
-  xattr -d com.apple.provenance "$TARGET" 2>/dev/null || true
-  log_detail "ℹ️  When SIP is on, provenance on dirs may still persist"
-  log_detail "💡 Tip: Use -r flag to byte-copy all files inside: clearmeta -r $TARGET"
-else
-  # For files: NUCLEAR treatment
-  nuke_file "$TARGET"
-fi
-
-# Show AFTER state
-if ! $FLAG_QUIET; then
-  echo ""
-  echo "▸ AFTER"
-  echo "───────────────────────────────────────────────────────────────"
-  xattrs_after=$(xattr "$TARGET" 2>/dev/null || true)
-  if [[ -n "$xattrs_after" ]]; then
-    echo "$xattrs_after" | sed 's/^/  /'
-  else
-    echo "  (no xattrs)"
-  fi
-  
-  if $HAS_EXIFTOOL && [[ -f "$TARGET" ]]; then
-    exif_count=$(exiftool -q -q -s "$TARGET" 2>/dev/null | wc -l | /usr/bin/tr -d ' ')
-    echo "  EXIF/XMP/IPTC tags: $exif_count"
-  fi
-fi
-
-# Check if only provenance remains (that's fine - it's local-only, doesn't leak)
-remaining_xattrs=$(xattr "$TARGET" 2>/dev/null | grep -v "com.apple.provenance" || true)
-if ! $FLAG_QUIET && [[ -n "$remaining_xattrs" ]]; then
-  echo ""
-  echo "▸ NOTE"
-  echo "───────────────────────────────────────────────────────────────"
-  echo "  ⚠️  Some xattrs could not be removed:"
-  echo "$remaining_xattrs" | sed 's/^/    /'
-fi
-
-echo ""
-echo "═══════════════════════════════════════════════════════════════"
+  [[ -d "$target" ]] && { command -v xattr >/dev/null 2>&1 && xattr -cr "$target" 2>/dev/null; return 0; }
+  mode=$(get_mode_for_file "$target" "$explicit_mode") || return 1
+  handler=$(printf '%s' "$CLEARMETA_REGISTRY" | "$JQ" --arg m "$mode" -re '.modes[$m]') || return 1
+  case "$handler" in
+    clearmeta_generic) clearmeta_generic_file "$target" ;;
+    clearmeta_media) clearmeta_media "$target" ;;
+    clearmeta_pdf_basic) clearmeta_pdf_basic "$target" ;;
+    clearmeta_pdf_safe) clearmeta_pdf_safe "$target" ;;
+    *) echo "clearmeta: unknown handler $handler" >&2; return 1 ;;
+  esac
+}
+recursive=false
+target=""
+explicit_mode=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      echo "usage: clearmeta [-r] [--pdf-safe | --mode=MODE] <path>"
+      echo "  -r, --recursive   process every file under <path> (directory)"
+      echo "  --pdf-safe        force PDFs to pdf_safe (flatten+strip)"
+      echo "  --mode=MODE       force mode: pdf_safe | pdf_basic | media | generic"
+      echo "  <path>            file or directory to strip metadata from"
+      exit 0
+      ;;
+    -r|--recursive) recursive=true; shift ;;
+    --pdf-safe) explicit_mode="pdf_safe"; shift ;;
+    --mode=*) explicit_mode="${1#--mode=}"; shift ;;
+    *) target="$1"; shift ;;
+  esac
+done
+[[ -z "$target" ]] && { echo "clearmeta: path required" >&2; exit 1; }
+target=$(eval "echo $target")
+target=$(cd "$(dirname "$target")" 2>/dev/null && pwd)/$(basename "$target") || true
+[[ -z "$target" || ! -e "$target" ]] && { echo "clearmeta: not found $target" >&2; exit 1; }
+echo "CLEARING METADATA: $target"
+command -v xattr >/dev/null 2>&1 && echo "BEFORE: $(xattr "$target" 2>/dev/null || echo '(none)')"
+clearmeta_main "$target" "$recursive" "$explicit_mode" || exit $?
+command -v xattr >/dev/null 2>&1 && echo "AFTER: $(xattr "$target" 2>/dev/null || echo '(none)')"

@@ -74,12 +74,12 @@ In `repo.config.json`, set **`remote`** to control `origin`:
 
 | Key | Values | Effect |
 |-----|--------|--------|
-| `prefer` | `"auto"` | Leave current URL as-is (default). |
-| `prefer` | `"ssh"` | Set origin to `git@host:slug.git` (derived from current URL). |
+| `prefer` | `"ssh"` | Set origin to `git@host:slug.git` (default; use when SSH is set globally). |
+| `prefer` | `"auto"` | Leave current URL as-is. |
 | `prefer` | `"https"` | Set origin to `https://host/slug.git`. |
 | `origin_url` | `"git@github.com:user/repo.git"` or any URL | Overrides; use this to pin exact URL. |
 
-After editing, run **`.hooks/scripts/set-remote.sh`** (or re-run `setup.sh`). Hooks autodetect SSH vs HTTPS from `remote.origin.url`; no change needed in other scripts.
+Default is **`ssh`** so repos created from this template match a global SSH preference (e.g. `git config --global url.git@github.com:.insteadOf https://github.com/`). After editing, run **`.hooks/scripts/set-remote.sh`** (or re-run `setup.sh`).
 
 <br/>
 
@@ -89,51 +89,51 @@ After editing, run **`.hooks/scripts/set-remote.sh`** (or re-run `setup.sh`). Ho
 
 | | Agent | Files |
 |:---:|-------|-------|
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/cursor.webp" width="16"> | Cursor | `.cursor/rules/*.mdc`, `.cursorignore` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/claude.webp" width="16"> | Claude | `CLAUDE.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/codex.webp" width="16"> | Codex | `AGENTS.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/copilot.webp" width="16"> | Copilot | `.github/copilot-instructions.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/gemini.webp" width="16"> | Gemini | `GEMINI.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/aider.webp" width="16"> | Aider | `.aider.conf.yml`, `CONVENTIONS.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/windsurf.webp" width="16"> | Windsurf | `.windsurfrules` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/zed.webp" width="16"> | Zed | `.rules` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/roo.webp" width="16"> | Roo | `.roomodes` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/codeium.webp" width="16"> | Codeium | `.codeiumignore` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/amazonq.webp" width="16"> | Amazon Q | `.amazonq/rules/*.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/kiro.webp" width="16"> | Kiro | `.kiro/steering/product.md`, `.kiro/steering/tech.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/opencode.webp" width="16"> | OpenCode | `opencode.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/kilo.webp" width="16"> | Kilo | `.kilocode/launchConfig.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/traycer.webp" width="16"> | Traycer | `.traycer/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/amp.webp" width="16"> | Amp | `AMP.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/qoder.webp" width="16"> | Qoder | `.qoder/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/warp.webp" width="16"> | Warp | `warp.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/droid.webp" width="16"> | Droid | `.droid.yaml` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/cline.webp" width="16"> | Cline | `.clinerules/*.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/trae.webp" width="16"> | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/antigravity.webp" width="16"> | Antigravity | `.antigravity` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/pearai.webp" width="16"> | Pear AI | `~/.pearai/config.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/conductor.webp" width="16"> | Conductor | `conductor.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/kimi.webp" width="16"> | Kimi CLI | `AGENTS.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/qwen.webp" width="16"> | Qwen CLI | `.env`, `.qwen-ignore` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/greptile.webp" width="16"> | Greptile | `.greptile/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/coderabbit.webp" width="16"> | CodeRabbit | `.coderabbit.yaml` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/graphite.webp" width="16"> | Graphite | `.graphite/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/cody.webp" width="16"> | Cody | `.sourcegraph/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/tabnine.webp" width="16"> | Tabnine | `.tabnine/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/supermaven.webp" width="16"> | Supermaven | `.supermaven/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/continue.webp" width="16"> | Continue | `.continue/config.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/devin.webp" width="16"> | Devin | `devin.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/replit.webp" width="16"> | Replit | `.replit` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/bolt.webp" width="16"> | Bolt | `bolt.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/v0.webp" width="16"> | v0 | `v0.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/lovable.webp" width="16"> | Lovable | `lovable.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/blackbox.webp" width="16"> | Blackbox | `.blackbox/` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/refs/heads/main/superset.webp" width="16"> | Superset | `.superset/config.json` |
-| <img src="https://raw.githubusercontent.com/vdutts7/webp/main/goose.webp" width="16"> | Goose | `.goosehints` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cursor.webp" width="16"> | Cursor | `.cursor/rules/*.mdc`, `.cursorignore` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/claude.webp" width="16"> | Claude | `CLAUDE.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codex.webp" width="16"> | Codex | `AGENTS.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/copilot.webp" width="16"> | Copilot | `.github/copilot-instructions.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gemini.webp" width="16"> | Gemini | `GEMINI.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aider.webp" width="16"> | Aider | `.aider.conf.yml`, `CONVENTIONS.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/windsurf.webp" width="16"> | Windsurf | `.windsurfrules` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zed.webp" width="16"> | Zed | `.rules` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roo.webp" width="16"> | Roo | `.roomodes` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp" width="16"> | Codeium | `.codeiumignore` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amazonq.webp" width="16"> | Amazon Q | `.amazonq/rules/*.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp" width="16"> | Kiro | `.kiro/steering/product.md`, `.kiro/steering/tech.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/opencode.webp" width="16"> | OpenCode | `opencode.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kilo.webp" width="16"> | Kilo | `.kilocode/launchConfig.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/traycer.webp" width="16"> | Traycer | `.traycer/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amp.webp" width="16"> | Amp | `AMP.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qoder.webp" width="16"> | Qoder | `.qoder/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/warp.webp" width="16"> | Warp | `warp.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/droid.webp" width="16"> | Droid | `.droid.yaml` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cline.webp" width="16"> | Cline | `.clinerules/*.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/trae.webp" width="16"> | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/antigravity.webp" width="16"> | Antigravity | `.antigravity` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pearai.webp" width="16"> | Pear AI | `~/.pearai/config.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/conductor.webp" width="16"> | Conductor | `conductor.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kimi.webp" width="16"> | Kimi CLI | `AGENTS.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qwen.webp" width="16"> | Qwen CLI | `.env`, `.qwen-ignore` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/greptile.webp" width="16"> | Greptile | `.greptile/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/coderabbit.webp" width="16"> | CodeRabbit | `.coderabbit.yaml` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/graphite.webp" width="16"> | Graphite | `.graphite/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cody.webp" width="16"> | Cody | `.sourcegraph/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tabnine.webp" width="16"> | Tabnine | `.tabnine/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/supermaven.webp" width="16"> | Supermaven | `.supermaven/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/continue.webp" width="16"> | Continue | `.continue/config.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/devin.webp" width="16"> | Devin | `devin.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/replit.webp" width="16"> | Replit | `.replit` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt.webp" width="16"> | Bolt | `bolt.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/v0.webp" width="16"> | v0 | `v0.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/lovable.webp" width="16"> | Lovable | `lovable.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/blackbox.webp" width="16"> | Blackbox | `.blackbox/` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/superset.webp" width="16"> | Superset | `.superset/config.json` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/goose.webp" width="16"> | Goose | `.goosehints` |
 
 ### Git hooks (platform-agnostic)
 
-Hooks live in `.hooks/` (not `.github/hooks/`) — works with any git forge (GitHub, GitLab, Codeberg, Gitea, Bitbucket, self-hosted).
+Hooks live in `.hooks/` (not `.github/hooks/`) — works with any git platform (GitHub, GitLab, Codeberg, Gitea, Bitbucket, self-hosted).
 
 One-time setup after clone: `.hooks/scripts/setup.sh`
 
@@ -147,7 +147,7 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 ### Scripts
 
-> Each script has usage instructions at the top of the file.
+> Each script has usage instructions at top of file
 
 | Script | Purpose |
 |--------|---------|
@@ -163,8 +163,8 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 - **Append-only** project memory
 - timestamped ledger / makeshift database for full traceability/auditability
-- AI agents auto-extend `timeline.json` as you work (or you manually invoke via `/timeline` slash command)
-> **Why:** Context persists across sessions -> when you return to a project, agents can read the timeline to understand what happened, what decisions were made, and what's blocked
+- AI agents extend `timeline.json` as you work (or manually invoke via `/timeline` slash command -> `.github/templates/cursor/commands/timeline.md`)
+> **Why:** Context persists across sessions -> when you return to a project, agents can read timeline to understand what happened, what decisions were made, what's blocked
 
 
 <br/>

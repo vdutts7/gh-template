@@ -35,7 +35,8 @@
   },
   "remote": {
     "_description": "prefer: ssh|https|auto. origin_url: explicit URL. Run .hooks/scripts/set-remote.sh",
-    "prefer": "auto",
+    "_note": "Default ssh so repos created from this template use SSH; matches global url.git@github.com:.insteadOf https://github.com/",
+    "prefer": "ssh",
     "origin_url": null
   }
 }
