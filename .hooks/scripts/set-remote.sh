@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Set origin URL from repo.config.json (remote.origin_url or remote.prefer) or leave as-is (auto).
-# Usage: .hooks/scripts/set-remote.sh
+# .hooks/scripts/set-remote.sh
+# Set origin URL from repo.config.json (remote.origin_url or remote.prefer) or leave as-is (auto)
 
 set -e
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
