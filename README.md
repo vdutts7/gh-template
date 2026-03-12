@@ -100,7 +100,7 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roocode.webp" width="16"> | Roo | `.roomodes` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp" width="16"> | Codeium | `.codeiumignore` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amazonq.webp" width="16"> | Amazon Q | `.amazonq/rules/*.md` |
-| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp" width="16"> | Kiro | `.kiro/steering/product.md`, `.kiro/steering/tech.md` |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp" width="16"> | Kiro | `.kiro/steering/` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/opencode.webp" width="16"> | OpenCode | `opencode.json` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kilo.webp" width="16"> | Kilo | `.kilocode/launchConfig.json` |
 | <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/traycer.webp" width="16"> | Traycer | `.traycer/` |
@@ -162,7 +162,7 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 ### timeline.json
 
 - **Append-only** project memory
-- timestamped ledger / makeshift database for full traceability/auditability
+- timestamped ledger/makeshift database for full traceability/auditability
 - AI agents extend `timeline.json` as you work (or manually invoke via `/timeline` slash command -> `.github/templates/cursor/commands/timeline.md`)
 > **Why:** Context persists across sessions -> when you return to a project, agents can read timeline to understand what happened, what decisions were made, what's blocked
 
@@ -172,5 +172,5 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 ## Contact
 
-<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/vd7-website/website" alt="website" width="32" height="32" /></a>
-<a href="https://x.com/vdutts7"><img src="https://img.shields.io/badge/vdutts7-000000?style=for-the-badge&logo=X&logoColor=white" alt="Twitter" /></a>
+<a href="https://vd7.io" style="display:inline-block;background:#000;color:#fff;padding:5px 14px;min-height:28px;box-sizing:border-box;border-radius:999px;border:1px solid rgba(255,255,255,0.25);text-decoration:none;font-size:12px;font-weight:500;font-family:'JetBrains Mono','SF Mono','Fira Code',monospace;vertical-align:middle;line-height:18px;"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773284159/vd7-website/vd7-circle.webp" alt="" width="18" height="18" style="vertical-align:middle;margin-right:6px;" />vd7.io</a>
+<a href="https://x.com/vdutts7" style="display:inline-block;background:#000;color:#fff;padding:5px 14px;min-height:28px;box-sizing:border-box;border-radius:999px;border:1px solid rgba(255,255,255,0.25);text-decoration:none;font-size:12px;font-weight:500;font-family:'JetBrains Mono','SF Mono','Fira Code',monospace;vertical-align:middle;line-height:18px;"><img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/x.webp" alt="" width="18" height="18" style="vertical-align:middle;margin-right:6px;" />/vdutts7</a>
