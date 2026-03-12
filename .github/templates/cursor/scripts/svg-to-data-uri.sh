@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# svg-to-datauri.sh - Convert SVG file(s) to data:image/svg+xml;base64,... (Bash 3.2+)
+# svg-to-data-uri.sh - Convert SVG file(s) to data:image/svg+xml;base64,... (Bash 3.2+)
 set -o pipefail 2>/dev/null || true
 set -e
 
@@ -10,7 +10,7 @@ for arg in "$@"; do
   case "$arg" in
     --minify) MINIFY=1 ;;
     -h|--help)
-      echo "Usage: svg-to-datauri.sh [--minify] <file.svg> [file2.svg ...]"
+      echo "Usage: svg-to-data-uri.sh [--minify] <file.svg> [file2.svg ...]"
       echo "Output: data:image/svg+xml;base64,<base64> per file (one per line)"
       exit 0
       ;;
@@ -19,13 +19,13 @@ for arg in "$@"; do
 done
 
 if [ ${#FILES[@]} -eq 0 ]; then
-  echo "Usage: svg-to-datauri.sh [--minify] <file.svg> [file2.svg ...]" >&2
+  echo "Usage: svg-to-data-uri.sh [--minify] <file.svg> [file2.svg ...]" >&2
   exit 1
 fi
 
 for f in "${FILES[@]}"; do
   if [ ! -r "$f" ]; then
-    echo "svg-to-datauri: not readable: $f" >&2
+    echo "svg-to-data-uri: not readable: $f" >&2
     exit 1
   fi
   if [ -n "$MINIFY" ]; then
