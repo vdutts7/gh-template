@@ -3,7 +3,7 @@
 <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/vd7.webp" alt="logo" width="80" height="80" />
 
 <h1>gh-template</h1>
-<p><i><b>GitHub repo template with extensive AI agent configs, git hooks, automation scripts, metadata sanitzation</b></i></p>
+<p><i><b>Agent-first GitHub repo template with extensive AI agent configs, agent-traversable template files (machine-readable "machreadified", non-prose), git hooks, automation scripts, asset management, metadata sanitzation</b></i></p>
 
 </div>
 
