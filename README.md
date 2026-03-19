@@ -49,22 +49,21 @@ repo.config.json
 ## Setup
 
 ```bash
-# 1. Create repo from template (GitHub UI: "Use this template" → "Create new repository")
-# 2. Clone + activate hooks (use SSH or HTTPS URL from GitHub repo page— same steps either way)
-git clone <your-repo-url>   # e.g. git@github.com:username/repo.git  or  https://github.com/username/repo.git
-cd <path-to-your-repo>
+# create repo from template in GitHub UI
+# clone + activate hooks
+git clone <your-repo-url> && cd <path-to-your-repo>
 .hooks/scripts/setup.sh
 
-# 3. Configure
-# edit repo.config.json (project details; optional: remote.prefer or remote.origin_url — see Remote below)
-cp ".github/templates/.gitignore.template" ".gitignore"       # mega gitignore (set & forget)
-cp ".github/templates/timeline.template.json" "timeline.json" # AI agents auto-extend this
+# edit repo.config.json (project details)
+cp ".github/templates/.gitignore.template" ".gitignore"
+cp ".github/templates/timeline.template.json" "timeline.json" # agents auto-extend this
 cp ".github/templates/TODOs.template.md" "TODOs.md"
 cp -r ".github/templates/_0" .
 
 
-# 4. Last: replace this README with your project README (run only when done with setup)
-cp .github/templates/README.template.md README.md        # then replace PROJECT_NAME, USERNAME
+# replace this README with your project README (run only when done with setup)
+cp .github/templates/README.template.md README.md  
+# then replace: PROJECT_NAME, USERNAME
 ```
 
 > **Step 2 is mandatory** — hooks don't activate until you run `setup.sh`.
@@ -91,51 +90,62 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 | | Agent | Files | Site |
 |:---:|-------|-------|------|
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cursor.webp) | Cursor | `.cursor/rules/*.mdc`, `.cursorignore` | [cursor.com](https://www.cursor.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/claude.webp) | Claude | `CLAUDE.md` | [anthropic.com](https://www.anthropic.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codex.webp) | Codex | `AGENTS.md` | [openai.com](https://openai.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/copilot.webp) | Copilot | `.github/copilot-instructions.md` | [GitHub Copilot](https://github.com/features/copilot) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/claude.webp) | Claude | `CLAUDE.md` | [anthropic.com](https://www.anthropic.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gemini.webp) | Gemini | `GEMINI.md` | [ai.google.dev](https://ai.google.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aider.webp) | Aider | `.aider.conf.yml`, `CONVENTIONS.md` | [aider.chat](https://aider.chat) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codex.webp) | Codex | `AGENTS.md` | [openai.com](https://openai.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp) | Windsurf | `.windsurfrules` | [codeium.com](https://codeium.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zed.webp) | Zed | `.rules` | [zed.dev](https://zed.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roocode.webp) | Roo | `.roomodes` | [roo.codes](https://roo.codes) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp) | Codeium | `.codeiumignore` | [codeium.com](https://codeium.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amazonq.webp) | Amazon Q | `.amazonq/rules/*.md` | [AWS Amazon Q](https://aws.amazon.com/q) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp) | Kiro | `.kiro/steering/` | [kiro.ai](https://kiro.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/opencode.webp) | OpenCode | `opencode.json` | [opencode.ai](https://opencode.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kilo.webp) | Kilo | `.kilocode/launchConfig.json` | [kilocode.com](https://kilocode.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/traycer.webp) | Traycer | `.traycer/` | [traycer.com](https://traycer.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amp.webp) | Amp | `AMP.md` | [useamp.com](https://useamp.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qoder.webp) | Qoder | `.qoder/` | [qoder.com](https://qoder.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/warp.webp) | Warp | `warp.md` | [warp.dev](https://www.warp.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/droid.webp) | Droid | `.droid.yaml` | [droid.ai](https://droid.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mistral.webp) | Mistral | `.vibe/config.toml` | [mistral.ai](https://mistral.ai) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cline.webp) | Cline | `.clinerules/*.md` | [cline.dev](https://cline.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/trae.webp) | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` | [gettrae.com](https://gettrae.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/antigravity.webp) | Antigravity | `.antigravity` | [antigravity.dev](https://antigravity.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pearai.webp) | Pear AI | `~/.pearai/config.json` | [pear.ai](https://pear.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/conductor.webp) | Conductor | `conductor.json` | [conductor.com](https://conductor.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kimi.webp) | Kimi CLI | `AGENTS.md` | [moonshot.cn](https://www.moonshot.cn) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qwen.webp) | Qwen CLI | `.env`, `.qwen-ignore` | [qwen.ai](https://qwen.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/greptile.webp) | Greptile | `.greptile/` | [greptile.com](https://greptile.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/coderabbit.webp) | CodeRabbit | `.coderabbit.yaml` | [coderabbit.ai](https://coderabbit.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/graphite.webp) | Graphite | `.graphite/` | [graphite.com](https://graphite.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cody.webp) | Cody | `.sourcegraph/` | [sourcegraph.com](https://sourcegraph.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tabnine.webp) | Tabnine | `.tabnine/` | [tabnine.com](https://tabnine.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/supermaven.webp) | Supermaven | `.supermaven/` | [supermaven.com](https://supermaven.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/continue.webp) | Continue | `.continue/config.json` | [continue.dev](https://continue.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aider.webp) | Aider | `.aider.conf.yml`, `CONVENTIONS.md` | [aider.chat](https://aider.chat) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/devin.webp) | Devin | `devin.md` | [devin.ai](https://devin.ai) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/replit.webp) | Replit | `.replit` | [replit.com](https://replit.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt-new.webp) | Bolt | `bolt.json` | [bolt.new](https://bolt.new) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/continue.webp) | Continue | `.continue/config.json` | [continue.dev](https://continue.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tabnine.webp) | Tabnine | `.tabnine/` | [tabnine.com](https://tabnine.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cody.webp) | Cody | `.sourcegraph/` | [sourcegraph.com](https://sourcegraph.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/jetbrains-ai.webp) | JetBrains AI | `.aiassistant/rules/*.md` | [jetbrains.com/ai](https://www.jetbrains.com/ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amazonq.webp) | Amazon Q | `.amazonq/rules/*.md` | [AWS Amazon Q](https://aws.amazon.com/q) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp) | Codeium | `.codeiumignore` | [codeium.com](https://codeium.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/geminicli.webp) | Gemini CLI | `GEMINI.md`, `.gemini/settings.json` | [geminicli.com](https://geminicli.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/v0.webp) | v0 | `v0.json` | [v0.dev](https://v0.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt-new.webp) | Bolt | `bolt.json` | [bolt.new](https://bolt.new) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/lovable.webp) | Lovable | `lovable.json` | [lovable.dev](https://lovable.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/blackbox.webp) | Blackbox | `.blackbox/` | [blackbox.ai](https://blackbox.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/superset.webp) | Superset | `.superset/config.json` | [superset.com](https://superset.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/goose.webp) | Goose | `.goosehints` | [goose.ai](https://goose.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/coderabbit.webp) | CodeRabbit | `.coderabbit.yaml` | [coderabbit.ai](https://coderabbit.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codegen.webp) | Codegen | `AGENTS.md` | [codegen.com](https://codegen.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/sweep.webp) | Sweep | `sweep.yaml`, `SWEEP.md` | [sweep.dev](https://sweep.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roocode.webp) | Roo | `.roomodes` | [roo.codes](https://roo.codes) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/augment.webp) | Augment / Auggie | `.augment/`, `.augment/commands/` | [augmentcode.com](https://www.augmentcode.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/junie.webp) | Junie | `.junie/AGENTS.md`, `.junie/guidelines.md`, `.junie/skills/`, `.junie/mcp/mcp.json` | [junie.jetbrains.com](https://junie.jetbrains.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/geminicli.webp) | Gemini CLI | `GEMINI.md`, `.gemini/settings.json` | [geminicli.com](https://geminicli.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/supermaven.webp) | Supermaven | `.supermaven/` | [supermaven.com](https://supermaven.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/warp.webp) | Warp | `warp.md` | [warp.dev](https://www.warp.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zed.webp) | Zed | `.rules` | [zed.dev](https://zed.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/void.webp) | Void | `.voidrules`, `.void/rules/` | [voideditor.com](https://voideditor.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aide.webp) | Aide | `.aide/` | [aide.dev](https://aide.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/goose.webp) | Goose | `.goosehints` | [goose.ai](https://goose.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amp.webp) | Amp | `AMP.md` | [useamp.com](https://useamp.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/trae.webp) | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` | [gettrae.com](https://gettrae.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp) | Kiro | `.kiro/steering/` | [kiro.ai](https://kiro.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/graphite.webp) | Graphite | `.graphite/` | [graphite.com](https://graphite.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/greptile.webp) | Greptile | `.greptile/` | [greptile.com](https://greptile.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/swe-agent.webp) | SWE-agent | `.swe-agent.yaml` | [swe-agent.com](https://swe-agent.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mentat.webp) | Mentat | `.mentat/` | [mentat.ai](https://mentat.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pieces.webp) | Pieces | `.pieces/` | [pieces.app](https://pieces.app) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/capy-ai.webp) | Capy | `.capy/` | [capy.ai](https://capy.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tonkotsu.webp) | Tonkotsu | `.tonkotsu/` | [tonkotsu.ai](https://tonkotsu.ai) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/sourcery.webp) | Sourcery | `.sourcery.yaml` | [sourcery.ai](https://sourcery.ai) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qodo.webp) | Qodo | `.qodo/` | [qodo.ai](https://www.qodo.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/blackbox.webp) | Blackbox | `.blackbox/` | [blackbox.ai](https://blackbox.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pearai.webp) | Pear AI | `~/.pearai/config.json` | [pear.ai](https://pear.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/droid.webp) | Droid | `.droid.yaml` | [droid.ai](https://droid.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/opencode.webp) | OpenCode | `opencode.json` | [opencode.ai](https://opencode.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kilo.webp) | Kilo | `.kilocode/launchConfig.json` | [kilocode.com](https://kilocode.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qwen.webp) | Qwen CLI | `.env`, `.qwen-ignore` | [qwen.ai](https://qwen.ai) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kimi.webp) | Kimi CLI | `AGENTS.md` | [moonshot.cn](https://www.moonshot.cn) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qoder.webp) | Qoder | `.qoder/` | [qoder.com](https://qoder.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/traycer.webp) | Traycer | `.traycer/` | [traycer.com](https://traycer.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/conductor.webp) | Conductor | `conductor.json` | [conductor.com](https://conductor.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/antigravity.webp) | Antigravity | `.antigravity` | [antigravity.dev](https://antigravity.dev) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/superset.webp) | Superset | `.superset/config.json` | [superset.com](https://superset.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zencoder.webp) | Zencoder | `.zencoder/` | [zencoder.ai](https://zencoder.ai) |
 
 ### Git hooks (platform-agnostic)
@@ -179,4 +189,4 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 ## Contact
 
-<a href="https://vd7.io"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NyIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDk3IDQwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImNpcmNsZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM1ZGQzZmYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyMmE4YzkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iOTciIGhlaWdodD0iNDAiIHJ4PSIyMCIgcnk9IjIwIiBmaWxsPSIjMDAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMsIDApIj48Y2lyY2xlIGN4PSI5IiBjeT0iMjAiIHI9IjkiIGZpbGw9InVybCgjY2lyY2xlKSIvPjx0ZXh0IHg9IjI2IiB5PSIyNSIgZmlsbD0iI2ZmZiIgZm9udC1mYW1pbHk9IidKZXRCcmFpbnMgTW9ubycsJ1NGIE1vbm8nLCdGaXJhIENvZGUnLG1vbm9zcGFjZSIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjUwMCI+dmQ3LmlvPC90ZXh0PjwvZz48L3N2Zz4=" alt="vd7.io" height="40" /></a> &nbsp; <a href="https://x.com/vdutts7"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMTgiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCAxMTggNDAiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMTgiIGhlaWdodD0iNDAiIHJ4PSIyMCIgcnk9IjIwIiBmaWxsPSIjMDAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMsIDApIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5LCAyMCkgc2NhbGUoMC41NSkgdHJhbnNsYXRlKC0xMiwgLTEyKSI+PHBhdGggZD0iTTE4LjI0NCAyLjI1aDMuMzA4bC03LjIyNyA4LjI2IDguNTAyIDExLjI0SDE2LjE3bC01LjIxNC02LjgxN0w0Ljk5IDIxLjc1SDEuNjhsNy43My04LjgzNUwxLjI1NCAyLjI1SDguMDhsNC43MTMgNi4yMzF6bS0xLjE2MSAxNy41MmgxLjgzM0w3LjA4NCA0LjEyNkg1LjExN3oiIGZpbGw9IiNmZmYiLz48L2c+PHRleHQgeD0iMjYiIHk9IjI1IiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0iJ0pldEJyYWlucyBNb25vJywnU0YgTW9ubycsJ0ZpcmEgQ29kZScsbW9ub3NwYWNlIiBmb250LXNpemU9IjEzIiBmb250LXdlaWdodD0iNTAwIj4vdmR1dHRzNzwvdGV4dD48L2c+PC9zdmc+" alt="/vdutts7" height="40" /></a>
+<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png" alt="vd7.io" height="40" /></a> &nbsp; <a href="https://x.com/vdutts7"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910817/readme-badges/readme-badge-x.png" alt="/vdutts7" height="40" /></a>
