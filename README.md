@@ -125,7 +125,7 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/continue.webp) | Continue | `.continue/config.json` | [continue.dev](https://continue.dev) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/devin.webp) | Devin | `devin.md` | [devin.ai](https://devin.ai) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/replit.webp) | Replit | `.replit` | [replit.com](https://replit.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt.webp) | Bolt | `bolt.json` | [bolt.new](https://bolt.new) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt-new.webp) | Bolt | `bolt.json` | [bolt.new](https://bolt.new) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/v0.webp) | v0 | `v0.json` | [v0.dev](https://v0.dev) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/lovable.webp) | Lovable | `lovable.json` | [lovable.dev](https://lovable.dev) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/blackbox.webp) | Blackbox | `.blackbox/` | [blackbox.ai](https://blackbox.ai) |
