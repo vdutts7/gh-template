@@ -1252,10 +1252,6 @@ _artifacts/
 _plans/
 TIMELINE.json
 !templates/TIMELINE.template.json
-FINDINGS.json
-!templates/FINDINGS.template.json
-promptpad.md
-!templates/promptpad.template.md
 TODOs.md
 !templates/TODOs.template.md
 
