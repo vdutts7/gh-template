@@ -161,7 +161,7 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 | Hook | Trigger | What it does |
 |------|---------|-------------|
-| `pre-commit` | before commit | strips file metadata, checks collaborator access |
+| `pre-commit` | before commit | blocks unapproved em dashes, supports autofix/whitelist approval, strips file metadata, checks collaborator access |
 | `pre-push` | before push | Touch ID gate when [shelllock](https://github.com/vdutts7/shelllock-macos) is installed (blocks AI push); then health check (large files, embedded repos) |
 | `post-checkout` | after checkout | warns if user.name doesn't match collaborator |
 
@@ -178,6 +178,11 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 | `gen-social.sh` | generate social preview image |
 | `health-check.sh` | pre-push health check |
 | `upload-cloudinary.sh` | upload assets to Cloudinary (set `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_UPLOAD_PRESET` env vars) |
+
+Em-dash hook quick use:
+- autofix flagged files: `EM_DASH_AUTOFIX=1 git commit ...`
+- approve current matches to whitelist: `EM_DASH_APPROVE=1 git commit ...`
+- optional custom fixer: `EM_DASH_FIXER=/path/to/fixer.sh git commit ...`
 
 ### timeline.json
 
