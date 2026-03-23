@@ -5,7 +5,7 @@
 <h1>gh-template</h1>
 <p><i><b>Agent-first GitHub repo template with extensive AI agent configs, agent-traversable template files (machine-readable "machreadified", non-prose), git hooks, automation scripts, asset management, metadata sanitzation</b></i></p>
 
-[![Github][github]][github-url]
+<a href="https://github.com/vdutts7/gh-template"><img src="./assets/badges/github.badge.svg" alt="GitHub" height="34" /></a> &nbsp; 
 
 
 </div>
@@ -194,6 +194,3 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 <a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png" alt="vd7.io" height="40" /></a> &nbsp; <a href="https://x.com/vdutts7"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910817/readme-badges/readme-badge-x.png" alt="/vdutts7" height="40" /></a>
 
-
-[github]: https://img.shields.io/badge/gh_template-000000?style=for-the-badge&logo=github&logoColor=white
-[github-url]: https://github.com/vdutts7/gh-template

@@ -4,10 +4,16 @@ set -eo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 [[ "$(git config core.hooksPath 2>/dev/null)" != ".hooks" ]] && git config --local include.path ../.gitconfig
 
+CHECK_EM_DASHES="$ROOT/.hooks/scripts/check-em-dashes.sh"
 CLEARMETA="$ROOT/.hooks/scripts/clearmeta.sh"
 CHECK_COLLAB="$ROOT/.hooks/scripts/check-collaborator.sh"
 
-# 1: metadata strip
+# 1: em-dash policy gate
+if [[ -x "$CHECK_EM_DASHES" ]]; then
+    "$CHECK_EM_DASHES"
+fi
+
+# 2: metadata strip
 if [[ -x "$CLEARMETA" ]]; then
     staged=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null)
     if [[ -n "$staged" ]]; then
@@ -18,7 +24,7 @@ if [[ -x "$CLEARMETA" ]]; then
     fi
 fi
 
-# 2: collaborator check
+# 3: collaborator check
 USERNAME=$(git config user.name 2>/dev/null || echo "")
 [[ -z "$USERNAME" ]] && { echo "[pre-commit] git user.name not set"; exit 1; }
 
