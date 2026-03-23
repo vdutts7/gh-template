@@ -1,15 +1,13 @@
 <div align="center">
 
 <!-- ICONS: Create at https://vd7.dev/icon-creator, export to assets/icons/, run gen-social.sh -->
-<img src="../../assets/icons/code.png" alt="logo" width="80" height="80" />
-<img src="../../assets/icons/github.png" alt="logo" width="80" height="80" />
+<img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/code.webp" alt="logo" width="80" height="80" />
+<img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/github.webp" alt="logo" width="80" height="80" />
 
 <h1 align="center">project-name</h1>
 <p align="center"><i><b>One-liner description</b></i></p>
 
-[![Github][github]][github-url]
-
-<img src="../../assets/social-preview.jpg" />
+<a href="/"><img src="../../assets/badges/github.badge.svg" alt="GitHub" height="34" /></a> &nbsp; 
 
 </div>
 
@@ -50,7 +48,7 @@ cd <REPO_NAME>
 
 <br/>
 
-## Tools used
+## Tools used 
 
 [![Example][example-badge]][example-url]
 
@@ -63,5 +61,3 @@ cd <REPO_NAME>
 <!-- BADGES - UPDATE THESE -->
 [example-badge]: https://img.shields.io/badge/Example-000000?style=for-the-badge
 [example-url]: https://example.com
-[github]: https://img.shields.io/badge/PROJECT__NAME-000000?style=for-the-badge&logo=github&logoColor=white
-[github-url]: https://github.com/GITHUB_USERNAME/PROJECT_NAME
