@@ -38,5 +38,15 @@
     "_note": "Default ssh so repos created from this template use SSH; matches global url.git@github.com:.insteadOf https://github.com/",
     "prefer": "ssh",
     "origin_url": null
+  },
+  "hooks": {
+    "em_dash_policy": {
+      "_description": "U+2014 em dash is blocked in pre-commit; use hyphen '-' unless explicitly approved",
+      "_quick_use": {
+        "autofix": "EM_DASH_AUTOFIX=1 git commit ...",
+        "approve_whitelist": "EM_DASH_APPROVE=1 git commit ...",
+        "custom_fixer": "EM_DASH_FIXER=/path/to/fixer.sh git commit ..."
+      }
+    }
   }
 }
