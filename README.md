@@ -17,13 +17,12 @@
 
 ```
 .hooks/
-├── pre-commit              ← metadata strip + collaborator check
+├── pre-commit              ← em-dash policy + metadata strip
 ├── pre-push                ← Touch ID gate (shelllock) + health check (large files, embedded repos)
-├── post-checkout           ← identity warning
+├── post-checkout           ← `.gitconfig` include (hooks path)
 └── scripts/
     ├── setup.sh            ← one-time setup after clone
     ├── set-remote.sh       ← set origin from repo.config.json (remote.prefer / origin_url)
-    ├── check-collaborator.sh ← forge-agnostic (GitHub/GitLab/Codeberg/Gitea/Bitbucket)
     ├── clearmeta.sh
     ├── gen-social.sh
     ├── health-check.sh
@@ -161,9 +160,9 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 
 | Hook | Trigger | What it does |
 |------|---------|-------------|
-| `pre-commit` | before commit | blocks unapproved em dashes, supports autofix/whitelist approval, strips file metadata, checks collaborator access |
+| `pre-commit` | before commit | blocks unapproved em dashes, supports autofix/whitelist approval, strips file metadata |
 | `pre-push` | before push | Touch ID gate when [shelllock](https://github.com/vdutts7/shelllock-macos) is installed (blocks AI push); then health check (large files, embedded repos) |
-| `post-checkout` | after checkout | warns if user.name doesn't match collaborator |
+| `post-checkout` | after checkout | ensures repo `.gitconfig` include (hooks path) |
 
 ### Scripts
 
@@ -173,7 +172,6 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 |--------|---------|
 | `setup.sh` | one-time setup after cloning (activates hooks) |
 | `set-remote.sh` | set origin from repo.config.json (remote.prefer or origin_url) |
-| `check-collaborator.sh` | forge-agnostic collaborator check (auto-detects from remote URL) |
 | `clearmeta.sh` | NUCLEAR metadata strip; note: Apple SIP-protected provenance may persist |
 | `gen-social.sh` | generate social preview image |
 | `health-check.sh` | pre-push health check |

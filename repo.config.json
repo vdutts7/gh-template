@@ -11,7 +11,7 @@
     "twitter": "vdutts7"
   },
   "access_control": {
-    "_description": "Hooks auto-detect forge from remote URL (GitHub/GitLab/Codeberg/Gitea/Bitbucket). Only owner + collaborators can commit.",
+    "_description": "Optional owner and token for repo automation scripts.",
     "owner": "$REPO_OWNER",
     "token": "$REPO_TOKEN"
   },
