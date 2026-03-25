@@ -6,7 +6,6 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 
 CHECK_EM_DASHES="$ROOT/.hooks/scripts/check-em-dashes.sh"
 CLEARMETA="$ROOT/.hooks/scripts/clearmeta.sh"
-CHECK_COLLAB="$ROOT/.hooks/scripts/check-collaborator.sh"
 
 # 1: em-dash policy gate
 if [[ -x "$CHECK_EM_DASHES" ]]; then
@@ -22,20 +21,4 @@ if [[ -x "$CLEARMETA" ]]; then
         done <<< "$staged"
         echo "[pre-commit] metadata stripped"
     fi
-fi
-
-# 3: collaborator check
-USERNAME=$(git config user.name 2>/dev/null || echo "")
-[[ -z "$USERNAME" ]] && { echo "[pre-commit] git user.name not set"; exit 1; }
-
-if [[ -x "$CHECK_COLLAB" ]]; then
-    "$CHECK_COLLAB"; rc=$?
-    [[ $rc -eq 0 || $rc -eq 2 ]] && exit 0
-    echo ""
-    echo "COMMIT BLOCKED — not a repo collaborator"
-    echo "  user.name: $USERNAME"
-    echo "  remote:    $(git config --get remote.origin.url 2>/dev/null)"
-    echo "  fix: git config user.name '<your_username>'"
-    echo ""
-    exit 1
 fi
