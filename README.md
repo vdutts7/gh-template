@@ -46,6 +46,8 @@ assets/
 repo.config.json 
 ```
 
+`.github/` is almost entirely **templates** you copy out (no Actions/workflows here). Forge-agnostic; GitHub-only where a tool expects it (e.g. Copilot → `.github/copilot-instructions.md`).
+
 <br/>
 
 ## Setup
@@ -65,10 +67,10 @@ cp -r ".github/templates/_0" .
 
 # replace this README with your project README (run only when done with setup)
 cp .github/templates/README.template.md README.md  
-# then replace: PROJECT_NAME, USERNAME
+# then replace placeholders (see "Template copy & placeholders" below)
 ```
 
-> **Step 2 is mandatory** — hooks don't activate until you run `setup.sh`.
+> **Step 2 is mandatory** - hooks don't activate until you run `setup.sh`.
 
 ### Remote (SSH vs HTTPS)
 
@@ -150,9 +152,41 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/superset.webp) | Superset | `.superset/config.json` | [superset.com](https://superset.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zencoder.webp) | Zencoder | `.zencoder/` | [zencoder.ai](https://zencoder.ai) |
 
+### Git forges
+
+| | Forge | Conventions | Site |
+|:---:|-------|-------------|------|
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/github.webp) | GitHub | `.github/` (Actions, templates); Copilot → `.github/copilot-instructions.md` | [github.com](https://github.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gitlab.webp) | GitLab | `.gitlab-ci.yml`, `.gitlab/` | [gitlab.com](https://gitlab.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeberg.webp) | Codeberg | Forgejo; same git + `.hooks/` workflow as this template | [codeberg.org](https://codeberg.org) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gitea.webp) | Gitea | Self-hosted; optional `.gitea/` CI; `origin` is your host | [gitea.io](https://gitea.io) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bitbucket.webp) | Bitbucket | `bitbucket-pipelines.yml` | [bitbucket.org](https://bitbucket.org) |
+
+### Template copy & placeholders
+
+| | Template | Install to | Notes |
+|:---:|----------|------------|-------|
+| | `.github/templates/.gitignore.template` | `.gitignore` | |
+| | `.github/templates/timeline.template.json` | `timeline.json` | |
+| | `.github/templates/TODOs.template.md` | `TODOs.md` | |
+| | `.github/templates/_0/` | `./_0/` | `cp -r`; gitignored scratch dirs |
+| | `.github/templates/README.template.md` | `README.md` | when project README is ready |
+| | `.github/templates/<agent>/` | see [Agent configs](#agent-configs) | e.g. `cp -r .github/templates/cursor/.cursor .` |
+
+| | Token | Replace in | Notes |
+|:---:|-------|------------|-------|
+| | `PROJECT_NAME` | `repo.config.json` - `repo.name`, `social_preview.title` | |
+| | `One-liner description` | `repo.config.json` - `repo.description` | |
+| | `project-name`, tagline | `README.md` (from README.template) | same values as `PROJECT_NAME` / description |
+| | `<REPO_URL>`, `<REPO_NAME>` | `README.md` - How to build | |
+| | `owner.username`, `website`, `twitter` | `repo.config.json` - `owner` | |
+| | `$REPO_OWNER`, `$REPO_TOKEN` | `repo.config.json` - `access_control` or `.env` | |
+| | `$CLOUDINARY_*` | env or `repo.config.json` - `cloudinary` | |
+| | `workflows.main_account` | `repo.config.json` - `workflows` | e.g. primary GitHub handle |
+
 ### Git hooks (platform-agnostic)
 
-Hooks live in `.hooks/` (not `.github/hooks/`) — works with any git platform (GitHub, GitLab, Codeberg, Gitea, Bitbucket, self-hosted).
+Hooks live in `.hooks/` (not `.github/hooks/`) - works with any git platform (GitHub, GitLab, Codeberg, Gitea, Bitbucket, self-hosted).
 
 One-time setup after clone: `.hooks/scripts/setup.sh`
 
