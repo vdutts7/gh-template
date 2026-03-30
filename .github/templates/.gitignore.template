@@ -291,6 +291,11 @@ nimcache/
 # Python
 *.py[cod]
 *$py.class
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
 *.so
 .Python
 build/

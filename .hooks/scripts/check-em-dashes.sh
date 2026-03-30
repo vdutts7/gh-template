@@ -65,6 +65,9 @@ done < <(
   rg -n --no-heading --color=never --hidden \
     -g '!.git/**' \
     -g '!node_modules/**' \
+    -g '!.hooks/scripts/**' \
+    -g '!.cursor/tools/**' \
+    -g '!**/fix-em-dashes*.sh' \
     -g '!.hooks/em-dash-whitelist.txt' \
     "—" . || true
 )
