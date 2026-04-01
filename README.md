@@ -132,6 +132,7 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/graphite.webp) | Graphite | `.graphite/` | [graphite.com](https://graphite.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/greptile.webp) | Greptile | `.greptile/` | [greptile.com](https://greptile.com) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/swe-agent.webp) | SWE-agent | `.swe-agent.yaml` | [swe-agent.com](https://swe-agent.com) |
+| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/openhands.webp) | OpenHands | `.openhands/`, `.agents/skills/`, `AGENTS.md` | [openhands.dev](https://openhands.dev) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mentat.webp) | Mentat | `.mentat/` | [mentat.ai](https://mentat.ai) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pieces.webp) | Pieces | `.pieces/` | [pieces.app](https://pieces.app) |
 | ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/capy-ai.webp) | Capy | `.capy/` | [capy.ai](https://capy.ai) |
