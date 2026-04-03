@@ -1,157 +1,145 @@
 #!/usr/bin/env bash
+# Block commits that *increase* U+2014 em-dash count vs HEAD (index vs parent).
+# Already-committed text is grandfathered; no per-line hash whitelist.
 set -eo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-WHITELIST="$ROOT/.hooks/em-dash-whitelist.txt"
 DEFAULT_FIXER="/Users/vdog/.cursor/tools/parsing/fix-em-dashes.sh"
 FIXER="${EM_DASH_FIXER:-$DEFAULT_FIXER}"
 
-mkdir -p "$(dirname "$WHITELIST")"
-if [[ ! -f "$WHITELIST" ]]; then
-  cat > "$WHITELIST" <<'EOF'
-# Approved em-dash occurrences.
-# Format: <repo-relative-path><TAB><sha256-of-line-content>
-EOF
+cd "$ROOT" || exit 1
+
+git rev-parse --verify HEAD >/dev/null 2>&1 || exit 0
+
+if [[ "${EM_DASH_APPROVE:-}" == "1" ]]; then
+  echo "[pre-commit] em-dash check skipped (EM_DASH_APPROVE=1)"
+  exit 0
 fi
 
-hash_text() {
-  printf '%s' "$1" | shasum -a 256 | awk '{print $1}'
-}
-
-key_for_match() {
-  local file="$1"
-  local text="$2"
-  printf '%s\t%s' "$file" "$(hash_text "$text")"
-}
-
-is_whitelisted() {
-  local key="$1"
-  while IFS= read -r line || [[ -n "$line" ]]; do
-    [[ -z "$line" || "$line" == \#* ]] && continue
-    [[ "$line" == "$key" ]] && return 0
-  done < "$WHITELIST"
+should_skip_path() {
+  case "$1" in
+    node_modules/* | .git/* | .cursor/tools/* | */fix-em-dashes*.sh | .hooks/em-dash-whitelist.txt) return 0 ;;
+  esac
   return 1
 }
 
-add_to_whitelist() {
-  local key="$1"
-  if ! is_whitelisted "$key"; then
-    printf '%s\n' "$key" >> "$WHITELIST"
-  fi
+count_em_dashes_stdin() {
+  LC_ALL=C python3 -c "import sys; print(sys.stdin.buffer.read().decode('utf-8', errors='replace').count('\u2014'))"
+}
+
+count_em_in_object() {
+  # HEAD:path may not exist (new file); git show would exit 128 and break the pipeline under pipefail.
+  { git show "$1" 2>/dev/null || true; } | count_em_dashes_stdin
+}
+
+# If $1 is the new path of a cached rename/copy, print old path; else print nothing.
+rename_old_path() {
+  local new_path="$1"
+  python3 -c '
+import subprocess, sys
+want = sys.argv[1]
+raw = subprocess.check_output(["git", "diff", "--cached", "--name-status", "-z"])
+parts = raw.split(b"\0")
+i = 0
+n = len(parts)
+while i < n:
+    while i < n and parts[i] == b"":
+        i += 1
+    if i >= n:
+        break
+    st = parts[i].decode(errors="replace")
+    i += 1
+    if i >= n:
+        break
+    p1 = parts[i]
+    i += 1
+    if st[:1] in ("R", "C"):
+        if i >= n:
+            break
+        p2 = parts[i]
+        i += 1
+        if p2.decode("utf-8", errors="replace") == want:
+            sys.stdout.write(p1.decode("utf-8", errors="replace"))
+            sys.exit(0)
+sys.exit(1)
+' "$new_path" 2>/dev/null || true
 }
 
 run_autofix() {
   local file="$1"
   local tmp="${file}.emdashfix.$$"
-
   [[ -x "$FIXER" ]] || return 1
   "$FIXER" "$file" > "$tmp"
   if ! cmp -s "$file" "$tmp"; then
     mv "$tmp" "$file"
-    # Keep index in sync if file was staged.
     git add -- "$file" 2>/dev/null || true
   else
     rm -f "$tmp"
   fi
-  return 0
 }
 
-cd "$ROOT"
+is_binary_in_cached_diff() {
+  local path="$1"
+  local line
+  line=$(git diff --cached --numstat -- "$path" 2>/dev/null | head -n 1)
+  [[ "$line" == $'-\t-\t'* ]]
+}
 
-matches=()
-while IFS= read -r line || [[ -n "$line" ]]; do
-  matches+=("$line")
-done < <(
-  rg -n --no-heading --color=never --hidden \
-    -g '!.git/**' \
-    -g '!node_modules/**' \
-    -g '!.hooks/scripts/**' \
-    -g '!.cursor/tools/**' \
-    -g '!**/fix-em-dashes*.sh' \
-    -g '!.hooks/em-dash-whitelist.txt' \
-    "—" . || true
-)
+declare -a violators=()
+declare -a violator_files=()
 
-if [[ ${#matches[@]} -eq 0 ]]; then
-  exit 0
-fi
+while IFS= read -r -d '' path; do
+  [[ -z "$path" ]] && continue
+  should_skip_path "$path" && continue
 
-declare -a unapproved=()
-declare -a unapproved_keys=()
-declare -a unapproved_files=()
+  [[ "$(git cat-file -t ":$path" 2>/dev/null)" == blob ]] || continue
+  is_binary_in_cached_diff "$path" && continue
 
-for entry in "${matches[@]}"; do
-  file="${entry%%:*}"
-  rest="${entry#*:}"
-  line_no="${rest%%:*}"
-  line_text="${rest#*:}"
-
-  # Normalize "./path" from rg output into "path"
-  file="${file#./}"
-  key="$(key_for_match "$file" "$line_text")"
-
-  if ! is_whitelisted "$key"; then
-    unapproved+=("${file}:${line_no}:${line_text}")
-    unapproved_keys+=("$key")
-    unapproved_files+=("$file")
+  new_count=$(count_em_in_object ":$path")
+  old_path=$(rename_old_path "$path")
+  if [[ -n "$old_path" ]]; then
+    old_count=$(count_em_in_object "HEAD:$old_path")
+  else
+    old_count=$(count_em_in_object "HEAD:$path")
   fi
-done
 
-if [[ ${#unapproved[@]} -eq 0 ]]; then
+  if [[ "$new_count" -gt "$old_count" ]]; then
+    violators+=("$path (em dashes: $old_count -> $new_count)")
+    violator_files+=("$path")
+  fi
+done < <(git diff --cached -z --name-only --diff-filter=ACM 2>/dev/null || true)
+
+if [[ ${#violators[@]} -eq 0 ]]; then
   exit 0
 fi
 
 echo ""
-echo "[pre-commit] BLOCKED - found unapproved em dash occurrences (U+2014)"
-echo "Rule: use hyphen '-' instead of em dash, per bionic-dev invariant."
+echo "[pre-commit] BLOCKED - staged changes add em dashes (U+2014) vs HEAD"
+echo "Rule: do not increase em-dash count in touched files; use hyphen '-' instead."
 echo ""
-printf '%s\n' "${unapproved[@]}"
+printf '%s\n' "${violators[@]}"
 echo ""
 
 if [[ "${EM_DASH_AUTOFIX:-}" == "1" && -x "$FIXER" ]]; then
   while IFS= read -r f; do
     [[ -z "$f" ]] && continue
     run_autofix "$f" || true
-  done < <(printf '%s\n' "${unapproved_files[@]}" | awk '!seen[$0]++')
+  done < <(printf '%s\n' "${violator_files[@]}" | awk '!seen[$0]++')
   exec "$0"
 fi
 
 if [[ -t 0 && -x "$FIXER" ]]; then
   read -r -p "Run autofix on affected files now? [y/N]: " autofix_answer
   case "$autofix_answer" in
-    y|Y|yes|YES)
-      # De-duplicate files with awk (portable and simple).
+    y | Y | yes | YES)
       while IFS= read -r f; do
         [[ -z "$f" ]] && continue
         run_autofix "$f" || true
-      done < <(printf '%s\n' "${unapproved_files[@]}" | awk '!seen[$0]++')
-
-      # Re-run check after fix attempt.
+      done < <(printf '%s\n' "${violator_files[@]}" | awk '!seen[$0]++')
       exec "$0"
       ;;
   esac
 fi
 
-if [[ "${EM_DASH_APPROVE:-}" == "1" ]]; then
-  for key in "${unapproved_keys[@]}"; do
-    add_to_whitelist "$key"
-  done
-  echo "[pre-commit] approved and whitelisted via EM_DASH_APPROVE=1"
-  exit 0
-fi
-
-if [[ -t 0 ]]; then
-  read -r -p "Approve and whitelist these occurrences? [y/N]: " answer
-  case "$answer" in
-    y|Y|yes|YES)
-      for key in "${unapproved_keys[@]}"; do
-        add_to_whitelist "$key"
-      done
-      echo "[pre-commit] approved and whitelisted"
-      exit 0
-      ;;
-  esac
-fi
-
-echo "Fix these lines, or re-run with EM_DASH_APPROVE=1 to whitelist in bulk."
+echo "Remove extra em dashes from the staged diff, or commit with EM_DASH_APPROVE=1 to bypass once."
 exit 1
