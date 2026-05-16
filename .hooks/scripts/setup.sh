@@ -9,7 +9,7 @@ git config --local include.path ../.gitconfig
 chmod +x .hooks/* .hooks/scripts/*.sh 2>/dev/null
 
 # Optional: set origin from repo.config.json (remote.prefer or remote.origin_url)
-[[ -f repo.config.json ]] && command -v jq &>/dev/null && .hooks/scripts/set-remote.sh 2>/dev/null || true
+[[ -f repo.config.json ]] && command -v jq &>/dev/null && .hooks/scripts/set-remote.sh || true
 
 echo "hooks activated:"
 for h in .hooks/pre-*  .hooks/post-*; do

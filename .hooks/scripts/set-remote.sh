@@ -2,11 +2,18 @@
 # .hooks/scripts/set-remote.sh
 # Set origin URL from repo.config.json (remote.origin_url or remote.prefer) or leave as-is (auto)
 
-set -e
+set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 CONFIG="${ROOT}/repo.config.json"
 [[ -f "$CONFIG" ]] || { echo "[set-remote] repo.config.json not found"; exit 1; }
 command -v jq &>/dev/null || { echo "[set-remote] jq required"; exit 1; }
+
+sync_identity() {
+    local setup_script="${CURTOOLS:-$HOME/.cursor/tools}/git/setup-git-config.sh"
+    if [[ -x "$setup_script" ]]; then
+        "$setup_script" "$ROOT" origin >/dev/null
+    fi
+}
 
 origin_url="$(jq -r '.remote.origin_url // empty' "$CONFIG" 2>/dev/null)"
 prefer="$(jq -r '.remote.prefer // "auto"' "$CONFIG" 2>/dev/null)"
@@ -15,11 +22,15 @@ prefer="$(jq -r '.remote.prefer // "auto"' "$CONFIG" 2>/dev/null)"
 if [[ -n "$origin_url" && "$origin_url" != "null" ]]; then
     git remote set-url origin "$origin_url"
     echo "[set-remote] origin → $origin_url"
+    sync_identity || true
     exit 0
 fi
 
 # Auto = leave current remote alone
-[[ "$prefer" == "auto" ]] && exit 0
+if [[ "$prefer" == "auto" ]]; then
+    sync_identity || true
+    exit 0
+fi
 
 current="$(git config --get remote.origin.url 2>/dev/null)"
 [[ -z "$current" ]] && { echo "[set-remote] no remote.origin set"; exit 1; }
@@ -43,3 +54,4 @@ esac
 
 git remote set-url origin "$newurl"
 echo "[set-remote] origin → $newurl"
+sync_identity || true
