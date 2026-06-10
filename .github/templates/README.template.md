@@ -11,6 +11,7 @@
      2. ```diff``` verdict block (GitHub colorized)
      3. optional HTML table row = column headers only
      4. three fenced snippets (json/text/json)- never HTML pre in tables
+     lang tags required on every open fence (P-008)
      router: /devspeak-readme · exemplar: gptcapture README.md
 -->
 
