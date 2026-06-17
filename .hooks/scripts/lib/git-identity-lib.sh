@@ -13,7 +13,6 @@ git_identity_routes_file() {
     printf '%s' "$top/.hooks/scripts/identity-routing.json"
     return
   fi
-  printf '%s' "/git/identity-routing.json"
 }
 
 git_identity_parse_remote_url() {
