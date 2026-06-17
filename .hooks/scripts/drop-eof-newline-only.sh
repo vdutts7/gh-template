@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 # drop-eof-newline-only.sh - silent pre-commit cleanup (never blocks)
-# Drops staged changes when bytes differ only by trailing \\n at EOF vs HEAD.
-# Opt-out: DROP_EOF_NEWLINE=0
 set -euo pipefail
 
 [[ "${DROP_EOF_NEWLINE:-1}" == "0" ]] && exit 0
@@ -12,7 +10,6 @@ git rev-parse --verify HEAD >/dev/null 2>&1 || exit 0
 
 exec python3 - <<'PY'
 import subprocess
-import sys
 from pathlib import Path
 from typing import Optional
 
@@ -41,17 +38,14 @@ for raw in staged_raw.split(b"\0"):
     path = raw.decode("utf-8", "surrogateescape")
     if is_binary_cached(path):
         continue
-
     head_b = blob(f"HEAD:{path}")
     stage_b = blob(f":{path}")
     if head_b is None or stage_b is None:
         continue
-
     if head_b.rstrip(b"\n") != stage_b.rstrip(b"\n"):
         continue
     if head_b == stage_b:
         continue
-
     wt_b = Path(path).read_bytes() if Path(path).is_file() else stage_b
     restore_worktree = wt_b == stage_b
     cmd = ["git", "restore", "--source=HEAD", "--staged"]

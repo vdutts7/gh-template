@@ -11,7 +11,7 @@ fi
 
 ROOT_TOP="$(git -C "$TARGET" rev-parse --show-toplevel 2>/dev/null || true)"
 HOOK_LIB="${ROOT_TOP}/.hooks/scripts/lib/git-identity-lib.sh"
-LIB="${CURTOOLS:-$HOME/.cursor/tools}/git/lib/git-identity-lib.sh"
+LIB="${CURTOOLS:-$HOME/.cursor/tools}/git/githooks/scripts/lib/git-identity-lib.sh"
 [[ -f "$HOOK_LIB" ]] && LIB="$HOOK_LIB"
 SETUP="${CURTOOLS:-$HOME/.cursor/tools}/git/setup-git-config.sh"
 [[ -f "$LIB" ]] && source "$LIB"
