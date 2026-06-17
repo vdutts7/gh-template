@@ -10,7 +10,7 @@ set -eo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
-DEFAULT_FIXER="${CURTOOLS:-$HOME/.cursor/tools}/parsing/fix-em-dashes.sh"
+DEFAULT_FIXER="${EM_DASH_FIXER:-$ROOT/.hooks/scripts/fix-em-dashes.sh}"
 
 FIXER="${EM_DASH_FIXER:-$DEFAULT_FIXER}"
 
@@ -38,7 +38,7 @@ should_skip_path() {
 
   case "$1" in
 
-    node_modules/* | .git/* | .cursor/tools/* | */fix-em-dashes*.sh | .hooks/em-dash-whitelist.txt) return 0 ;;
+    node_modules/* | .git/* | */fix-em-dashes*.sh | .hooks/em-dash-whitelist.txt) return 0 ;;
 
   esac
 

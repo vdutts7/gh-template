@@ -2,7 +2,7 @@
 
 # .hooks/scripts/clearmeta.sh
 
-# self-contained metadata stripper for git hooks. No .cursor dependency
+# self-contained metadata stripper for git hooks. No external host dependency
 
 # usage: clearmeta [ -r ] [ --pdf-safe | --mode=MODE ] <path>
 

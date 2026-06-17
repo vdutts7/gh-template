@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.2.0",
-  "description": "Canonical git identity routing for provider+username -> repo-local user.name/user.email and SSH key. Policy: $CURREGISTRY/git/policy.manifest.json; routing: $CURREGISTRY/git/account-routing.json",
+  "description": "Git identity routing: map provider+username to repo-local user.name/user.email. Edit routes for your remotes.",
   "routes": [
     {
       "namespace": "codeberg-fakuku",
@@ -19,8 +19,7 @@
       "name": "fakukucur",
       "email": "fakukucur@users.noreply.codeberg.org",
       "ssh_host_alias": "codeberg-fakukucur",
-      "ssh_key_path": "$HOME/.ssh/codeberg_fakukucur",
-      "dedicated_repos": ["fakukucur/.cursor"]
+      "ssh_key_path": "$HOME/.ssh/codeberg_fakukucur"
     },
     {
       "namespace": "github-vdutts7",
@@ -37,7 +36,11 @@
     "username": "jackgofff",
     "purpose": "gh CLI only - not a git remote identity",
     "token_env": "GH_CLI_TOKEN",
-    "forbidden_for": ["git push", "git remote origin on product repos", "replacing vdutts7 ssh for github.com"]
+    "forbidden_for": [
+      "git push",
+      "git remote origin on product repos",
+      "replacing vdutts7 ssh for github.com"
+    ]
   },
   "integration_sandbox": {
     "namespace": "github-scorphx",
@@ -46,7 +49,6 @@
     "purpose": "OAuth + iOS GitHub mobile for AI app integrations - NOT Mac git identity",
     "machine_wired": false,
     "ios_github_mobile_only": true,
-    "org_buffers": "$CURREGISTRY/git/github-scorphx/integration-orgs.manifest.json",
     "forbidden_for": [
       "default Mac git push/pull",
       "replacing vdutts7 ssh for github.com",
@@ -65,7 +67,7 @@
       "name": "fakuku",
       "email": "fakuku@users.noreply.codeberg.org",
       "ssh_key_path": "$HOME/.ssh/codeberg_key",
-      "_warning": "Bare codeberg.org host uses fakuku key; fakukucur/.cursor MUST use Host codeberg-fakukucur"
+      "_warning": "Bare codeberg.org host uses default key; use ssh Host alias for alternate Codeberg identity"
     }
   }
 }
