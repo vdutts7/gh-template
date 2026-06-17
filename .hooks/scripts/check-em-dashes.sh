@@ -10,7 +10,7 @@ set -eo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
-DEFAULT_FIXER="/Users/vdog/.cursor/tools/parsing/fix-em-dashes.sh"
+DEFAULT_FIXER="${CURTOOLS:-$HOME/.cursor/tools}/parsing/fix-em-dashes.sh"
 
 FIXER="${EM_DASH_FIXER:-$DEFAULT_FIXER}"
 

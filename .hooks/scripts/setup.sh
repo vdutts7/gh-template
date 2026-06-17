@@ -14,7 +14,7 @@ cd "$ROOT"
 
 git config --local include.path ../.gitconfig
 
-chmod +x .hooks/* .hooks/scripts/*.sh 2>/dev/null
+chmod +x .hooks/* .hooks/scripts/*.sh .hooks/scripts/lib/*.sh 2>/dev/null
 
 
 

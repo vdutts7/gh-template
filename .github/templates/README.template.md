@@ -7,12 +7,8 @@
 ---
 
 <!-- eyecatcher (required when problem-first): surfaces.yaml#eyecatcher
-     1. outcome table (human rows, ❌/✅)
-     2. ```diff``` verdict block (GitHub colorized)
-     3. optional HTML table row = column headers only
-     4. three fenced snippets (json/text/json)- never HTML pre in tables
-     lang tags required on every open fence (P-008)
-     router: /devspeak-readme · exemplar: gptcapture README.md
+     one user turn · three skeletons (link + fenced json/text/json)
+     same utterance · permuted ids · limbs visible by shape diff- no outcome matrix
 -->
 
 ## Issue
