@@ -36,6 +36,12 @@
     "origin_url": null
   },
   "hooks": {
+    "identity": {
+      "_description": "pre-commit/post-merge/post-checkout: remote URL must match bundled identity-routing.json",
+      "script": ".hooks/scripts/enforce-git-identity.sh",
+      "data": ".hooks/scripts/identity-routing.json",
+      "blocks": true
+    },
     "em_dash_policy": {
       "_description": "U+2014 em dash is blocked in pre-commit; use hyphen '-' unless explicitly approved",
       "_quick_use": {
@@ -43,6 +49,12 @@
         "approve_whitelist": "EM_DASH_APPROVE=1 git commit ...",
         "custom_fixer": "EM_DASH_FIXER=/path/to/fixer.sh git commit ..."
       }
+    },
+    "eof_newline_only": {
+      "_description": "Silent pre-commit: drops staged changes when file bytes differ from HEAD only by trailing newlines at EOF",
+      "script": ".hooks/scripts/drop-eof-newline-only.sh",
+      "blocks": false,
+      "opt_out": "DROP_EOF_NEWLINE=0 git commit ..."
     }
   }
 }
