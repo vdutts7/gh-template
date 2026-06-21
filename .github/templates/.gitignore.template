@@ -15,7 +15,7 @@ Desktop.ini
 
 # =============================================================================
 # ----------EXCLUSION CLUSTERS (pattern_archetypes)-----------------------------
-# SSOT: $CURREGISTRY/git/gitignore-canonical.json → category_order + exclusion_categories
+# Exclusion clusters - one archetype per category (GI-017).
 # Register category in registry FIRST, then mirror here. One archetype per category (GI-017).
 # =============================================================================
 
