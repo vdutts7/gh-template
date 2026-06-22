@@ -257,7 +257,7 @@ mcp.json
 # =============================================================================
 
 _0
-timeline.json
+!timeline.json
 !templates/TIMELINE.template.json
 TODOs.md
 !templates/TODOs.template.md
