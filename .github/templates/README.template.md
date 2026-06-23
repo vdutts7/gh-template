@@ -2,18 +2,16 @@
   <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/code.webp" alt="logo" width="80" height="80" />
 </p>
 <h1 align="center">project-name</h1>
-<p align="center">Short tagline for the repo</p>
+<p align="center"><em>terse tagline</em></p>
 
 ---
 
-<!-- eyecatcher (required when problem-first): surfaces.yaml#eyecatcher
-     one user turn · three skeletons (link + fenced json/text/json)
-     same utterance · permuted ids · limbs visible by shape diff- no outcome matrix
--->
+<!-- (optional) visual -->
 
 ## Issue
 
-<!-- problem-first; ❌ failure mode clusters -->
+<!-- problem-first
+❌ failure mode clusters -->
 
 ## Setup
 

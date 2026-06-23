@@ -2,13 +2,13 @@
 
 # .hooks/scripts/gen-social.sh - generate GitHub social preview from config
 
-# reads title from repo.config.json, uses icons from assets/icons/*
+# reads title from repo.spine.json, uses icons from assets/icons/*
 
 
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
-CONFIG="$ROOT/repo.config.json"
+CONFIG="$ROOT/repo.spine.json"
 
 ICONS_DIR="$ROOT/assets/icons"
 
