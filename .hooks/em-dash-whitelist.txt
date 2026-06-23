@@ -1,5 +1,4 @@
-# Obsolete: the hook no longer uses path/hash rows here.
+# Obsolete: path whitelist unused.
 #
-# Policy: see githooks/scripts/check-em-dashes.sh
-# Strips: Unicode en/em dash (U+2013, U+2014) and literal JSON \\u2013/\\u2014 escapes -> hyphen (-)
+# Policy: Unicode U+2013/U+2014 -> hyphen (-) in staged text; .hooks/** skipped.
 # Bypass once: EM_DASH_APPROVE=1 git commit ...
