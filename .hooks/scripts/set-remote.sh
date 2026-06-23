@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Set origin URL from repo.config.json (remote.origin_url or remote.prefer) or leave as-is (auto)
+# Set origin URL from repo.spine.json (remote.origin_url or remote.prefer) or leave as-is (auto)
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
-CONFIG="${ROOT}/repo.config.json"
-[[ -f "$CONFIG" ]] || { echo "[set-remote] repo.config.json not found"; exit 1; }
+CONFIG="${ROOT}/repo.spine.json"
+[[ -f "$CONFIG" ]] || { echo "[set-remote] repo.spine.json not found"; exit 1; }
 command -v jq &>/dev/null || { echo "[set-remote] jq required"; exit 1; }
 
 sync_identity() {

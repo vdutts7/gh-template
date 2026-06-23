@@ -22,7 +22,7 @@
 ├── post-checkout           ← `.gitconfig` include (hooks path)
 └── scripts/
     ├── setup.sh            ← one-time setup after clone
-    ├── set-remote.sh       ← set origin from repo.config.json (remote.prefer / origin_url)
+    ├── set-remote.sh       ← set origin from repo.spine.json (remote.prefer / origin_url)
     ├── clearmeta.sh
     ├── gen-social.sh
     ├── health-check.sh
@@ -43,7 +43,7 @@ assets/
 ├── icons/
 │   └── agents/                 
 └── social-preview-blank.png    ← social preview (1280x640)
-repo.config.json 
+repo.spine.json 
 ```
 
 `.github/` is almost entirely **templates** you copy out (no Actions/workflows here). Forge-agnostic; GitHub-only where a tool expects it (e.g. Copilot → `.github/copilot-instructions.md`).
@@ -58,7 +58,7 @@ repo.config.json
 git clone <your-repo-url> && cd <path-to-your-repo>
 .hooks/scripts/setup.sh
 
-# edit repo.config.json (project details)
+# edit repo.spine.json (project details)
 cp ".github/templates/.gitignore.template" ".gitignore"
 cp ".github/templates/timeline.template.json" "timeline.json" # agents auto-extend this
 cp ".github/templates/TODOs.template.md" "TODOs.md"
@@ -74,7 +74,7 @@ cp .github/templates/README.template.md README.md
 
 ### Remote (SSH vs HTTPS)
 
-In `repo.config.json`, set **`remote`** to control `origin`:
+In `repo.spine.json`, set **`remote`** to control `origin`:
 
 | Key | Values | Effect |
 |-----|--------|--------|
@@ -176,14 +176,14 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 
 | | Token | Replace in | Notes |
 |:---:|-------|------------|-------|
-| | `PROJECT_NAME` | `repo.config.json` - `repo.name`, `social_preview.title` | |
-| | `One-liner description` | `repo.config.json` - `repo.description` | |
+| | `PROJECT_NAME` | `repo.spine.json` - `repo.name`, `social_preview.title` | |
+| | `One-liner description` | `repo.spine.json` - `repo.description` | |
 | | `project-name`, tagline | `README.md` (from README.template) | same values as `PROJECT_NAME` / description |
 | | `<REPO_URL>`, `<REPO_NAME>` | `README.md` - How to build | |
-| | `owner.username`, `website`, `twitter` | `repo.config.json` - `owner` | |
-| | `$REPO_OWNER`, `$REPO_TOKEN` | `repo.config.json` - `access_control` or `.env` | |
-| | `$CLOUDINARY_*` | env or `repo.config.json` - `cloudinary` | |
-| | `workflows.main_account` | `repo.config.json` - `workflows` | e.g. primary GitHub handle |
+| | `owner.username`, `website`, `twitter` | `repo.spine.json` - `owner` | |
+| | `$REPO_OWNER`, `$REPO_TOKEN` | `repo.spine.json` - `access_control` or `.env` | |
+| | `$CLOUDINARY_*` | env or `repo.spine.json` - `cloudinary` | |
+| | `workflows.main_account` | `repo.spine.json` - `workflows` | e.g. primary GitHub handle |
 
 ### Git hooks (platform-agnostic)
 
@@ -206,7 +206,7 @@ One-time setup after clone: `.hooks/scripts/setup.sh`
 | Script | Purpose |
 |--------|---------|
 | `setup.sh` | one-time setup after cloning (activates hooks) |
-| `set-remote.sh` | set origin from repo.config.json (remote.prefer or origin_url) |
+| `set-remote.sh` | set origin from repo.spine.json (remote.prefer or origin_url) |
 | `clearmeta.sh` | NUCLEAR metadata strip; note: Apple SIP-protected provenance may persist |
 | `gen-social.sh` | generate social preview image |
 | `health-check.sh` | pre-push health check |

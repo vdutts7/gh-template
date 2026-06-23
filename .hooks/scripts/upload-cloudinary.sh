@@ -4,13 +4,13 @@
 
 # upload assets to Cloudinary
 
-# Reads from env vars (CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET) or repo.config.json
+# Reads from env vars (CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET) or repo.spine.json
 
 
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
-CONFIG="$ROOT/repo.config.json"
+CONFIG="$ROOT/repo.spine.json"
 
 ICONS_DIR="$ROOT/assets/icons"
 
