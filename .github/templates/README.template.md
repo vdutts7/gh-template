@@ -22,9 +22,15 @@ chmod +x ./script.sh
 ## Usage
 
 ```bash
-# script.sh
 ./script.sh https://svc.acme.dev/v1/7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42
 ```
+
+## Tools Used
+
+<!-- shields.io for-the-badge; one <img> per tool -->
+<img src="https://img.shields.io/badge/ToolName-HEX?style=for-the-badge&logo=LOGO&logoColor=white" alt="ToolName"/>
+
+<br/>
 
 ## Contact
 
