@@ -93,75 +93,75 @@ Default is **`ssh`** so repos created from this template match a global SSH pref
 
 | | Agent | Files | Site |
 |:---:|-------|-------|------|
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cursor.webp) | Cursor | `.cursor/rules/*.mdc`, `.cursorignore` | [cursor.com](https://www.cursor.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/copilot.webp) | Copilot | `.github/copilot-instructions.md` | [GitHub Copilot](https://github.com/features/copilot) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/claude.webp) | Claude | `CLAUDE.md` | [anthropic.com](https://www.anthropic.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gemini.webp) | Gemini | `GEMINI.md` | [ai.google.dev](https://ai.google.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codex.webp) | Codex | `AGENTS.md` | [openai.com](https://openai.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp) | Windsurf | `.windsurfrules` | [codeium.com](https://codeium.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mistral.webp) | Mistral | `.vibe/config.toml` | [mistral.ai](https://mistral.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cline.webp) | Cline | `.clinerules/*.md` | [cline.dev](https://cline.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aider.webp) | Aider | `.aider.conf.yml`, `CONVENTIONS.md` | [aider.chat](https://aider.chat) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/devin.webp) | Devin | `devin.md` | [devin.ai](https://devin.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/replit.webp) | Replit | `.replit` | [replit.com](https://replit.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/continue.webp) | Continue | `.continue/config.json` | [continue.dev](https://continue.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tabnine.webp) | Tabnine | `.tabnine/` | [tabnine.com](https://tabnine.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cody.webp) | Cody | `.sourcegraph/` | [sourcegraph.com](https://sourcegraph.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/jetbrains-ai.webp) | JetBrains AI | `.aiassistant/rules/*.md` | [jetbrains.com/ai](https://www.jetbrains.com/ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amazonq.webp) | Amazon Q | `.amazonq/rules/*.md` | [AWS Amazon Q](https://aws.amazon.com/q) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp) | Codeium | `.codeiumignore` | [codeium.com](https://codeium.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/geminicli.webp) | Gemini CLI | `GEMINI.md`, `.gemini/settings.json` | [geminicli.com](https://geminicli.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/v0.webp) | v0 | `v0.json` | [v0.dev](https://v0.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt-new.webp) | Bolt | `bolt.json` | [bolt.new](https://bolt.new) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/lovable.webp) | Lovable | `lovable.json` | [lovable.dev](https://lovable.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/coderabbit.webp) | CodeRabbit | `.coderabbit.yaml` | [coderabbit.ai](https://coderabbit.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codegen.webp) | Codegen | `AGENTS.md` | [codegen.com](https://codegen.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/sweep.webp) | Sweep | `sweep.yaml`, `SWEEP.md` | [sweep.dev](https://sweep.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roocode.webp) | Roo | `.roomodes` | [roo.codes](https://roo.codes) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/augment.webp) | Augment / Auggie | `.augment/`, `.augment/commands/` | [augmentcode.com](https://www.augmentcode.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/junie.webp) | Junie | `.junie/AGENTS.md`, `.junie/guidelines.md`, `.junie/skills/`, `.junie/mcp/mcp.json` | [junie.jetbrains.com](https://junie.jetbrains.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/supermaven.webp) | Supermaven | `.supermaven/` | [supermaven.com](https://supermaven.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/warp.webp) | Warp | `warp.md` | [warp.dev](https://www.warp.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zed.webp) | Zed | `.rules` | [zed.dev](https://zed.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/void.webp) | Void | `.voidrules`, `.void/rules/` | [voideditor.com](https://voideditor.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aide.webp) | Aide | `.aide/` | [aide.dev](https://aide.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/goose.webp) | Goose | `.goosehints` | [goose.ai](https://goose.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amp.webp) | Amp | `AMP.md` | [useamp.com](https://useamp.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/trae.webp) | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` | [gettrae.com](https://gettrae.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp) | Kiro | `.kiro/steering/` | [kiro.ai](https://kiro.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/graphite.webp) | Graphite | `.graphite/` | [graphite.com](https://graphite.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/greptile.webp) | Greptile | `.greptile/` | [greptile.com](https://greptile.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/swe-agent.webp) | SWE-agent | `.swe-agent.yaml` | [swe-agent.com](https://swe-agent.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/openhands.webp) | OpenHands | `.openhands/`, `.agents/skills/`, `AGENTS.md` | [openhands.dev](https://openhands.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mentat.webp) | Mentat | `.mentat/` | [mentat.ai](https://mentat.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pieces.webp) | Pieces | `.pieces/` | [pieces.app](https://pieces.app) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/capy-ai.webp) | Capy | `.capy/` | [capy.ai](https://capy.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tonkotsu.webp) | Tonkotsu | `.tonkotsu/` | [tonkotsu.ai](https://tonkotsu.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/sourcery.webp) | Sourcery | `.sourcery.yaml` | [sourcery.ai](https://sourcery.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qodo.webp) | Qodo | `.qodo/` | [qodo.ai](https://www.qodo.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/blackbox.webp) | Blackbox | `.blackbox/` | [blackbox.ai](https://blackbox.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pearai.webp) | Pear AI | `~/.pearai/config.json` | [pear.ai](https://pear.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/droid.webp) | Droid | `.droid.yaml` | [droid.ai](https://droid.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/opencode.webp) | OpenCode | `opencode.json` | [opencode.ai](https://opencode.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kilo.webp) | Kilo | `.kilocode/launchConfig.json` | [kilocode.com](https://kilocode.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qwen.webp) | Qwen CLI | `.env`, `.qwen-ignore` | [qwen.ai](https://qwen.ai) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kimi.webp) | Kimi CLI | `AGENTS.md` | [moonshot.cn](https://www.moonshot.cn) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qoder.webp) | Qoder | `.qoder/` | [qoder.com](https://qoder.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/traycer.webp) | Traycer | `.traycer/` | [traycer.com](https://traycer.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/conductor.webp) | Conductor | `conductor.json` | [conductor.com](https://conductor.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/antigravity.webp) | Antigravity | `.antigravity` | [antigravity.dev](https://antigravity.dev) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/superset.webp) | Superset | `.superset/config.json` | [superset.com](https://superset.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zencoder.webp) | Zencoder | `.zencoder/` | [zencoder.ai](https://zencoder.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cursor.webp" width="40" height="40" alt="cursor" /> | Cursor | `.cursor/rules/*.mdc`, `.cursorignore` | [cursor.com](https://www.cursor.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/copilot.webp" width="40" height="40" alt="copilot" /> | Copilot | `.github/copilot-instructions.md` | [GitHub Copilot](https://github.com/features/copilot) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/claude.webp" width="40" height="40" alt="claude" /> | Claude | `CLAUDE.md` | [anthropic.com](https://www.anthropic.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gemini.webp" width="40" height="40" alt="gemini" /> | Gemini | `GEMINI.md` | [ai.google.dev](https://ai.google.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codex.webp" width="40" height="40" alt="codex" /> | Codex | `AGENTS.md` | [openai.com](https://openai.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp" width="40" height="40" alt="codeium" /> | Windsurf | `.windsurfrules` | [codeium.com](https://codeium.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mistral.webp" width="40" height="40" alt="mistral" /> | Mistral | `.vibe/config.toml` | [mistral.ai](https://mistral.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cline.webp" width="40" height="40" alt="cline" /> | Cline | `.clinerules/*.md` | [cline.dev](https://cline.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aider.webp" width="40" height="40" alt="aider" /> | Aider | `.aider.conf.yml`, `CONVENTIONS.md` | [aider.chat](https://aider.chat) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/devin.webp" width="40" height="40" alt="devin" /> | Devin | `devin.md` | [devin.ai](https://devin.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/replit.webp" width="40" height="40" alt="replit" /> | Replit | `.replit` | [replit.com](https://replit.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/continue.webp" width="40" height="40" alt="continue" /> | Continue | `.continue/config.json` | [continue.dev](https://continue.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tabnine.webp" width="40" height="40" alt="tabnine" /> | Tabnine | `.tabnine/` | [tabnine.com](https://tabnine.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cody.webp" width="40" height="40" alt="cody" /> | Cody | `.sourcegraph/` | [sourcegraph.com](https://sourcegraph.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/jetbrains-ai.webp" width="40" height="40" alt="jetbrains-ai" /> | JetBrains AI | `.aiassistant/rules/*.md` | [jetbrains.com/ai](https://www.jetbrains.com/ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amazonq.webp" width="40" height="40" alt="amazonq" /> | Amazon Q | `.amazonq/rules/*.md` | [AWS Amazon Q](https://aws.amazon.com/q) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeium.webp" width="40" height="40" alt="codeium" /> | Codeium | `.codeiumignore` | [codeium.com](https://codeium.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/geminicli.webp" width="40" height="40" alt="geminicli" /> | Gemini CLI | `GEMINI.md`, `.gemini/settings.json` | [geminicli.com](https://geminicli.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/v0.webp" width="40" height="40" alt="v0" /> | v0 | `v0.json` | [v0.dev](https://v0.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bolt-new.webp" width="40" height="40" alt="bolt-new" /> | Bolt | `bolt.json` | [bolt.new](https://bolt.new) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/lovable.webp" width="40" height="40" alt="lovable" /> | Lovable | `lovable.json` | [lovable.dev](https://lovable.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/coderabbit.webp" width="40" height="40" alt="coderabbit" /> | CodeRabbit | `.coderabbit.yaml` | [coderabbit.ai](https://coderabbit.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codegen.webp" width="40" height="40" alt="codegen" /> | Codegen | `AGENTS.md` | [codegen.com](https://codegen.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/sweep.webp" width="40" height="40" alt="sweep" /> | Sweep | `sweep.yaml`, `SWEEP.md` | [sweep.dev](https://sweep.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/roocode.webp" width="40" height="40" alt="roocode" /> | Roo | `.roomodes` | [roo.codes](https://roo.codes) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/augment.webp" width="40" height="40" alt="augment" /> | Augment / Auggie | `.augment/`, `.augment/commands/` | [augmentcode.com](https://www.augmentcode.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/junie.webp" width="40" height="40" alt="junie" /> | Junie | `.junie/AGENTS.md`, `.junie/guidelines.md`, `.junie/skills/`, `.junie/mcp/mcp.json` | [junie.jetbrains.com](https://junie.jetbrains.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/supermaven.webp" width="40" height="40" alt="supermaven" /> | Supermaven | `.supermaven/` | [supermaven.com](https://supermaven.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/warp.webp" width="40" height="40" alt="warp" /> | Warp | `warp.md` | [warp.dev](https://www.warp.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zed.webp" width="40" height="40" alt="zed" /> | Zed | `.rules` | [zed.dev](https://zed.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/void.webp" width="40" height="40" alt="void" /> | Void | `.voidrules`, `.void/rules/` | [voideditor.com](https://voideditor.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/aide.webp" width="40" height="40" alt="aide" /> | Aide | `.aide/` | [aide.dev](https://aide.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/goose.webp" width="40" height="40" alt="goose" /> | Goose | `.goosehints` | [goose.ai](https://goose.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/amp.webp" width="40" height="40" alt="amp" /> | Amp | `AMP.md` | [useamp.com](https://useamp.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/trae.webp" width="40" height="40" alt="trae" /> | Trae | `.trae/project_rules.md`, `.trae/user_rules.md` | [gettrae.com](https://gettrae.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kiro.webp" width="40" height="40" alt="kiro" /> | Kiro | `.kiro/steering/` | [kiro.ai](https://kiro.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/graphite.webp" width="40" height="40" alt="graphite" /> | Graphite | `.graphite/` | [graphite.com](https://graphite.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/greptile.webp" width="40" height="40" alt="greptile" /> | Greptile | `.greptile/` | [greptile.com](https://greptile.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/swe-agent.webp" width="40" height="40" alt="swe-agent" /> | SWE-agent | `.swe-agent.yaml` | [swe-agent.com](https://swe-agent.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/openhands.webp" width="40" height="40" alt="openhands" /> | OpenHands | `.openhands/`, `.agents/skills/`, `AGENTS.md` | [openhands.dev](https://openhands.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/mentat.webp" width="40" height="40" alt="mentat" /> | Mentat | `.mentat/` | [mentat.ai](https://mentat.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pieces.webp" width="40" height="40" alt="pieces" /> | Pieces | `.pieces/` | [pieces.app](https://pieces.app) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/capy-ai.webp" width="40" height="40" alt="capy-ai" /> | Capy | `.capy/` | [capy.ai](https://capy.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/tonkotsu.webp" width="40" height="40" alt="tonkotsu" /> | Tonkotsu | `.tonkotsu/` | [tonkotsu.ai](https://tonkotsu.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/sourcery.webp" width="40" height="40" alt="sourcery" /> | Sourcery | `.sourcery.yaml` | [sourcery.ai](https://sourcery.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qodo.webp" width="40" height="40" alt="qodo" /> | Qodo | `.qodo/` | [qodo.ai](https://www.qodo.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/blackbox.webp" width="40" height="40" alt="blackbox" /> | Blackbox | `.blackbox/` | [blackbox.ai](https://blackbox.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/pearai.webp" width="40" height="40" alt="pearai" /> | Pear AI | `~/.pearai/config.json` | [pear.ai](https://pear.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/droid.webp" width="40" height="40" alt="droid" /> | Droid | `.droid.yaml` | [droid.ai](https://droid.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/opencode.webp" width="40" height="40" alt="opencode" /> | OpenCode | `opencode.json` | [opencode.ai](https://opencode.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kilo.webp" width="40" height="40" alt="kilo" /> | Kilo | `.kilocode/launchConfig.json` | [kilocode.com](https://kilocode.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qwen.webp" width="40" height="40" alt="qwen" /> | Qwen CLI | `.env`, `.qwen-ignore` | [qwen.ai](https://qwen.ai) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/kimi.webp" width="40" height="40" alt="kimi" /> | Kimi CLI | `AGENTS.md` | [moonshot.cn](https://www.moonshot.cn) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/qoder.webp" width="40" height="40" alt="qoder" /> | Qoder | `.qoder/` | [qoder.com](https://qoder.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/traycer.webp" width="40" height="40" alt="traycer" /> | Traycer | `.traycer/` | [traycer.com](https://traycer.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/conductor.webp" width="40" height="40" alt="conductor" /> | Conductor | `conductor.json` | [conductor.com](https://conductor.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/antigravity.webp" width="40" height="40" alt="antigravity" /> | Antigravity | `.antigravity` | [antigravity.dev](https://antigravity.dev) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/superset.webp" width="40" height="40" alt="superset" /> | Superset | `.superset/config.json` | [superset.com](https://superset.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/zencoder.webp" width="40" height="40" alt="zencoder" /> | Zencoder | `.zencoder/` | [zencoder.ai](https://zencoder.ai) |
 
 ### Git forges
 
 | | Forge | Conventions | Site |
 |:---:|-------|-------------|------|
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/github.webp) | GitHub | `.github/` (Actions, templates); Copilot → `.github/copilot-instructions.md` | [github.com](https://github.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gitlab.webp) | GitLab | `.gitlab-ci.yml`, `.gitlab/` | [gitlab.com](https://gitlab.com) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeberg.webp) | Codeberg | Forgejo; same git + `.hooks/` workflow as this template | [codeberg.org](https://codeberg.org) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gitea.webp) | Gitea | Self-hosted; optional `.gitea/` CI; `origin` is your host | [gitea.io](https://gitea.io) |
-| ![](https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bitbucket.webp) | Bitbucket | `bitbucket-pipelines.yml` | [bitbucket.org](https://bitbucket.org) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/github.webp" width="40" height="40" alt="github" /> | GitHub | `.github/` (Actions, templates); Copilot → `.github/copilot-instructions.md` | [github.com](https://github.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gitlab.webp" width="40" height="40" alt="gitlab" /> | GitLab | `.gitlab-ci.yml`, `.gitlab/` | [gitlab.com](https://gitlab.com) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/codeberg.webp" width="40" height="40" alt="codeberg" /> | Codeberg | Forgejo; same git + `.hooks/` workflow as this template | [codeberg.org](https://codeberg.org) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/gitea.webp" width="40" height="40" alt="gitea" /> | Gitea | Self-hosted; optional `.gitea/` CI; `origin` is your host | [gitea.io](https://gitea.io) |
+| <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/bitbucket.webp" width="40" height="40" alt="bitbucket" /> | Bitbucket | `bitbucket-pipelines.yml` | [bitbucket.org](https://bitbucket.org) |
 
 ### Template copy & placeholders
 
