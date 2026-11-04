@@ -12,10 +12,11 @@ if ! git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 fi
 
 ROOT_TOP="$(git -C "$TARGET" rev-parse --show-toplevel 2>/dev/null || true)"
+LIB=""
 HOOK_LIB="${ROOT_TOP}/.hooks/scripts/lib/git-identity-lib.sh"
 [[ -f "$HOOK_LIB" ]] && LIB="$HOOK_LIB"
 SETUP="${ROOT_TOP}/.hooks/scripts/setup-git-identity.sh"
-[[ -f "$LIB" ]] && source "$LIB"
+[[ -n "$LIB" && -f "$LIB" ]] && source "$LIB"
 
 remotes=()
 while IFS= read -r r; do
@@ -78,10 +79,6 @@ elif [[ "$author_name" != "$want_name" || "$author_email" != "$want_email" ]]; t
   echo "  want:   $want_name <$want_email>" >&2
   echo "  author: ${author_name:-<unset>} <${author_email:-unset}>" >&2
   exit 1
-fi
-
-url="$(git -C "$TARGET" config --get "remote.${canonical}.url" 2>/dev/null || true)"
-if git_identity_parse_remote_url "$url" 2>/dev/null; then
 fi
 
 [[ "$MODE" == "--quiet" ]] || echo "[enforce-git-identity] OK $want_name <$want_email> via $canonical"

@@ -7,5 +7,8 @@ ENFORCE="$ROOT/.hooks/scripts/enforce-git-config.sh"
 [[ -x "$ENFORCE" ]] && "$ENFORCE" "$ROOT" --quiet
 VERIFY_AUTHORS="$ROOT/.hooks/scripts/verify-commit-authors.sh"
 [[ -x "$VERIFY_AUTHORS" ]] && "$VERIFY_AUTHORS" "$ROOT"
+# opt_in / repo-local extension (no-op unless present)
+LOCAL_PP="$ROOT/.hooks/scripts/local-pre-push.sh"
+if [[ -x "$LOCAL_PP" ]]; then "$LOCAL_PP"; fi
 HEALTH="$ROOT/.hooks/scripts/health-check.sh"
 [[ -x "$HEALTH" ]] && exec "$HEALTH"

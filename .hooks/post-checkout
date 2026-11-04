@@ -4,3 +4,5 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 [[ "$(git config core.hooksPath 2>/dev/null)" != ".hooks" ]] && git config --local include.path ../.gitconfig
 ENFORCE="$ROOT/.hooks/scripts/enforce-git-config.sh"
 [[ -x "$ENFORCE" ]] && "$ENFORCE" "$ROOT" --sync-quiet || true
+FILE_ATTRS_APPLY="$ROOT/.hooks/scripts/file-attrs-apply.sh"
+[[ -x "$FILE_ATTRS_APPLY" ]] && "$FILE_ATTRS_APPLY" || true
